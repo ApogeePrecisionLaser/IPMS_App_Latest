@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/linearlay1"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/corona"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearlay2"
+        android:layout_below="@+id/linearlay1">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:id="@+id/question"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            />
+
+
+    </LinearLayout>
+
+
+   <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+            android:layout_below="@+id/linearlay2">
+          <TextView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:gravity="center"
+              android:id="@+id/one"
+           android:textStyle="bold"
+           android:textSize="15dp"
+          />
+
+
+</LinearLayout>
+</RelativeLayout>

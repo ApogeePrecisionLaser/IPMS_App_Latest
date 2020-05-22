@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/iddtl"
+        android:title="ID details">
+    </item>
+    <item
+        android:id="@+id/idprsnl"
+        android:title="Personal details">
+    </item>
+
+    <item
+        android:id="@+id/oflnpss"
+        android:title="Offline Epass">
+    </item>
+
+    <item
+        android:id="@+id/epasinfo"
+        android:title="Epass Info">
+    </item>
+
+</menu>

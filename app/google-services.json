@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1015992037774",
+    "firebase_url": "https://ipms-842b8.firebaseio.com",
+    "project_id": "ipms-842b8",
+    "storage_bucket": "ipms-842b8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1015992037774:android:ec08efd505369c044c34df",
+        "android_client_info": {
+          "package_name": "com.jpss.ipmsintegratedpandemicmanagementsystem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1015992037774-1l0u2up5m68hvihp6mir8gsorgcnjr7n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jpss.ipmsintegratedpandemicmanagementsystem",
+            "certificate_hash": "b3257451c260ed3da9507fb963fcbfa14d9d5952"
+          }
+        },
+        {
+          "client_id": "1015992037774-nljn27to6psnkjj2ci49hcbn2qldoiom.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqH0DDLTTleQkORQwNqjowecBzgR1EQcM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1015992037774-nljn27to6psnkjj2ci49hcbn2qldoiom.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

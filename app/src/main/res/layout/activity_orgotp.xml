@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+
+
+    tools:openDrawer="start">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tool"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tool"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="You will receive an OTP shortly.\n Enter OTP here to verify your number"
+            android:id="@+id/textView"
+            android:textSize="18sp"
+            android:layout_marginTop="50dip"
+            android:layout_marginLeft="10dp" />
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText_otp"
+            android:digits="0123456789."
+            android:inputType="numberDecimal"
+            android:hint="Enter OTP"
+            android:maxLength="6"
+            android:singleLine="true"
+            android:padding="10dp"
+            android:layout_marginTop="75dip"
+            />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="206dp"
+            android:layout_height="wrap_content"
+            android:text="submit"
+
+            android:textSize="15dp"
+            android:id="@+id/button_submit"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dip" />
+        <Button
+            android:id="@+id/btnLinkToResendOtp"
+            android:layout_width="326dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dip"
+
+            android:text="OTP not received? Resend OTP"
+            android:textAllCaps="false"
+            android:textSize="15dp" />
+    </LinearLayout>
+
+
+
+</RelativeLayout>

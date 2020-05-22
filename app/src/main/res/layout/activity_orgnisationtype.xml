@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Other.OrgnisationTypeActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tool"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="50dp"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_margin="20dp"
+            android:padding="10dp"
+            android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/Layout"
+        android:layout_below="@+id/spinLayout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="Orgnisation Type"
+            android:textSize="18sp"
+            android:padding="5dp"
+            android:layout_height="wrap_content"/>
+        <Spinner
+            android:id="@+id/orgTypeSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+        </Spinner>
+    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/edt_orgmobile"
+                android:singleLine="true"
+                android:inputType="phone"
+                android:visibility="gone"
+                android:hint="@string/hint_mobile"
+                android:maxLength="10"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp" />
+        </LinearLayout>
+            <Button
+                android:id="@+id/btnproceeds"
+                android:layout_width="150dp"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="20dip"
+                android:text="@string/btn_proceed"
+                android:minHeight="40dp" />
+            <Button
+                android:id="@+id/btnproceedss"
+                android:layout_width="150dp"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="20dip"
+                android:text="@string/btn_proceed"
+                android:minHeight="40dp" />
+    </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

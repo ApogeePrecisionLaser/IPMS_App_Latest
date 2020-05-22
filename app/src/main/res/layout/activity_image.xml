@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".Other.ImageActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tool"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/Layouts"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="Select Your Id:"
+                android:textSize="15sp"
+                android:padding="5dp"
+                android:layout_height="wrap_content"/>
+            <Spinner
+                android:id="@+id/idSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp">
+
+            </Spinner>
+        </LinearLayout>
+        <EditText
+            android:id="@+id/identity_No"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@android:drawable/editbox_background_normal"
+            android:hint="Enter Identity No." />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:layout_marginTop="60dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/btn_image"
+                android:layout_width="80dp"
+                android:layout_marginLeft="10dp"
+                android:onClick="imageclick"
+                android:layout_height="match_parent"
+                android:background="@drawable/ic_camera_blue_24dp" />
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:textSize="15sp"
+                 android:textAlignment="center"
+                 android:text="@string/hint_img"
+                 android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="5dp"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/photo"
+                    android:layout_width="wrap_content"
+                    android:text="User Photo"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp"
+                    android:layout_gravity="center"
+                    android:layout_height="wrap_content"/>
+                <ImageView
+                    android:id="@+id/userPhoto"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"/>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginStart="5dp"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/id"
+                    android:layout_width="wrap_content"
+                    android:text="User Id Photo"
+                    android:textSize="15sp"
+                    android:textColor="@android:color/black"
+                    android:layout_gravity="center"
+                    android:layout_height="wrap_content"/>
+                <ImageView
+                    android:id="@+id/userId"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"/>
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/sendServer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="50dp"
+            android:text="Submit" />
+    </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

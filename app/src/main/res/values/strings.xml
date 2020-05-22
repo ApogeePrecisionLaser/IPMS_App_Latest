@@ -1,0 +1,115 @@
+<resources>
+    <string name="app_name">IPMS</string>
+    <string name="ble_not_supported">BLE is not supported</string>
+    <string name="label_data">Data:</string>
+    <string name="label_device_address">Welcome To Fire App</string>
+    <string name="label_state">State:</string>
+    <string name="no_data">No data</string>
+    <string name="E_pass">E pass</string>
+    <string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="title_devices">BLE Device Scan</string>
+    <string name="error_bluetooth_not_supported">Bluetooth not supported.</string>
+
+    <string name="unknown_device">Unknown device</string>
+    <string name="unknown_characteristic">Unknown characteristic</string>
+    <string name="unknown_service">Unknown service</string>
+    s
+    <!-- Menu items -->
+    <string name="menu_connect">Connect</string>
+    <string name="menu_disconnect">Disconnect</string>
+    <string name="menu_scan">Scan</string>
+    <string name="menu_stop">Stop</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Quarantine_Person_Details</string>
+    <string name="title_activity_main3">Main3Activity</string>
+    <string name="title_activity_device_scan">DeviceScanActivity</string>
+    <string name="title_paired_devices">Paired Devices</string>
+    <string name="title_other_devices">Other Available Devices</string>
+    <string name="button_scan">Scan for devices</string>
+    <string name="title_activity_device_control">DeviceControlActivity</string>
+    <string name="title_activity_device_control1">DeviceControlActivity1</string>
+    <string name="start">Lets Start</string>
+    <string name="startString">This app connect your ble device to DGPS device and you can apply  operations.</string>
+
+    <string-array name="numbers">
+        <item>ladder</item>
+        <item>hammer</item>
+        <item>hydrolic</item>
+        <item>water</item>
+        <item>fuel</item>
+        <item>pipe</item>
+        <item>force</item>
+        <item>tarun</item>
+        <item>shubham</item>
+        <item>robin</item>
+    </string-array>
+    <array name="family">
+        <item name="Family Member">Family Member</item>
+        <item name="Wife">Wife</item>
+        <item name="Husband">Husband</item>
+        <item name="Brother">Brother</item>
+        <item name="Sister">Sister</item>
+        <item name="Father">Father</item>
+    </array>
+    <string name="hint_email">Email</string>
+    <string name="hint_mobile">Mobile number</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_name">Fullname</string>
+    <string name="btn_login">LOGIN</string>
+    <string name="btn_register">REGISTER</string>
+    <string name="btn_link_to_register">Not a member? Sign up now.</string>
+    <string name="btn_link_to_login">Already registred! Login Me.</string>
+    <string name="welcome">Welcome</string>
+    <string name="btn_logout">LOGOUT</string>
+    <string name="name">Fullname</string>
+
+
+    <array name="gender">
+        <item name="gender">Select Your Gender</item>
+        <item name="Male">Male</item>
+        <item name="Female">Female</item>
+    </array>
+
+    <array name="blood_group">
+        <item name="Blood Group">Blood Group</item>
+        <item name="O+">O+</item>
+        <item name="O-">O-</item>
+        <item name="A+">A+</item>
+        <item name="A-">A-</item>
+        <item name="B+">B+</item>
+        <item name="B-">B-</item>
+        <item name="AB+">AB+</item>
+        <item name="AB-">AB-</item>
+    </array>
+    <array name="status_spinnerdata">
+        <item name="All">All</item>
+        <item name="Complete">Complete</item>
+        <item name="Pending">Pending</item>
+        <item name="Process">Process</item>
+        <item name="Selected Auto">Selected Auto</item>
+        <item name="Cancel">Cancel</item>
+    </array>
+    <string name="title_activity_login">Sign in</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="hint_fuelltr">Enter Fuel ltre</string>
+    <string name="hint_recieptno">Enter Receipt number</string>
+    <string name="hint_vehicleno">Enter Vehicle number</string>
+    <string name="btn_proceed">PROCEED</string>
+    <string name="btn_back">BACK</string>
+    <string name="hint_img"><![CDATA[<---Click here To Capture Image and Id Image..]]></string>
+    <string name="hints"><![CDATA[<---Click here To Capture Image..]]></string>
+    <string name="btn_family">Add Family Members</string>
+    <string name="title_activity_route">Map</string>
+
+</resources>

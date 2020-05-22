@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.jpss.ipmsintegratedpandemicmanagementsystem">
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the 'MyLocation' functionality.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permisson.ACCESS_GPS" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <application
+        android:name=".Other.MyInternetConnection"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".E_pass.PlacesActivity"></activity>
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".E_pass.RouteActivity"
+            android:label="@string/title_activity_route" />
+        <activity android:name=".E_pass.ProfileQrActivity" />
+        <activity android:name=".Other.AddFamilyActivity" />
+        <activity android:name=".Other.FAQ" />
+        <activity android:name=".Other.ContactManagement" />
+        <activity android:name=".E_pass.Iddetails" />
+        <activity android:name=".E_pass.EpassList" />
+        <activity android:name=".E_pass.Vendorrqstlist" />
+        <activity android:name=".Other.ImageActivity" />
+        <activity android:name=".Other.DocumentsActivity" />
+        <activity
+            android:name=".Other.QuaratineActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Other.Otpactivity" />
+        <activity android:name=".Other.Login" />
+        <activity android:name=".Other.EpassActivity" />
+        <activity android:name=".E_pass.Epassdashboard" />
+        <activity android:name=".E_pass.Epass" />
+        <activity android:name=".E_pass.PersonalDetail" />
+        <activity android:name=".E_pass.Epassinfo" />
+        <activity android:name=".E_pass.VendorActivity" />
+        <activity android:name=".Other.NumberRegistrationActivity" />
+        <activity android:name=".Other.OrgnisationTypeActivity" />
+        <activity android:name=".Other.OrgOtpActivity" />
+        <activity android:name=".Other.DrashBoardActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".Other.MyMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <!--
+<uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+        <receiver
+            android:name=".Other.MyBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
+        <activity android:name=".Other.Organisation" />
+        <activity android:name=".Other.IpportActivity" />
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+        <activity android:name=".Other.Registration" />
+        <activity android:name=".Other.qurantinedetails" />
+        <activity android:name=".Other.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
