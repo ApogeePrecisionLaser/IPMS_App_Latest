@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +18,8 @@ import com.jpss.ipmsintegratedpandemicmanagementsystem.Database.DatabaseOperatio
 import com.jpss.ipmsintegratedpandemicmanagementsystem.E_pass.RouteActivity;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.Model.GenericModel;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.R;
+import com.jpss.ipmsintegratedpandemicmanagementsystem.services.NetworkChangeReceiver;
+import com.jpss.ipmsintegratedpandemicmanagementsystem.utils.NetworkUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +33,7 @@ import static android.Manifest.permission.INTERNET;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static com.jpss.ipmsintegratedpandemicmanagementsystem.data.Constants.CONNECTIVITY_ACTION;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -38,6 +42,21 @@ public class MainActivity extends AppCompatActivity {
     public static final int RequestPermissionCode = 7;
     DatabaseOperation databaseOperation;
     String orgname;
+    IntentFilter intentFilter;
+    NetworkChangeReceiver receiver;
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(receiver, intentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +65,13 @@ public class MainActivity extends AppCompatActivity {
         CheckingPermissionIsEnabledOrNot();
         databaseOperation=new DatabaseOperation(MainActivity.this);
         databaseOperation.open();
+        intentFilter = new IntentFilter();
+        intentFilter.addAction(CONNECTIVITY_ACTION);
+        receiver = new NetworkChangeReceiver();
+
+        if (NetworkUtil.getConnectivityStatus(MainActivity.this) > 0 ) System.out.println("Connect");
+        else System.out.println("No connection");
+
         setorgvalues();
         btn_login =  findViewById(R.id.btnLogin);
         btn_register = findViewById(R.id.btnRegister);

@@ -153,7 +153,10 @@ public class DrashBoardActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onBackPressed() {
-      finish();
+        // finish();
+        finishAffinity();
+        DrashBoardActivity.this.finish();
+        System.exit(0);
     }
 
     @Override

@@ -9,6 +9,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +21,8 @@ import android.widget.Toast;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.Database.DatabaseOperation;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.Model.GenericModel;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.R;
+import com.jpss.ipmsintegratedpandemicmanagementsystem.services.NetworkChangeReceiver;
+import com.jpss.ipmsintegratedpandemicmanagementsystem.utils.NetworkUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +31,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static com.jpss.ipmsintegratedpandemicmanagementsystem.data.Constants.CONNECTIVITY_ACTION;
 
 public class Login extends AppCompatActivity {
 
@@ -47,6 +52,20 @@ public class Login extends AppCompatActivity {
     SessionManager sessionManager;
     Toolbar toolbar;
     String num;
+    IntentFilter intentFilter;
+    NetworkChangeReceiver receiver;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(receiver, intentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +91,12 @@ public class Login extends AppCompatActivity {
         edit_password = (EditText) findViewById(R.id.password);
         btnLogin = (Button) findViewById(R.id.btnLogin);
 
+        intentFilter = new IntentFilter();
+        intentFilter.addAction(CONNECTIVITY_ACTION);
+        receiver = new NetworkChangeReceiver();
+
+        if (NetworkUtil.getConnectivityStatus(Login.this) > 0 ) System.out.println("Connect");
+        else System.out.println("No connection");
         sessionManager=new SessionManager(this);
         boolean islogin=sessionManager.checkLogin();
         if(islogin){
@@ -96,26 +121,39 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                try {
-
-                    sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("Login_number", edit_mobile.getText().toString().trim());
-                     num=  edit_mobile.getText().toString().trim();
-                    editor.putString("login_password", edit_password.getText().toString().trim());
-                    editor.commit();
+                if (validationSuccess()) {
                     database();
+                    try {
 
-                } catch (Exception e) {
+                        sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("Login_number", edit_mobile.getText().toString().trim());
+                        num=  edit_mobile.getText().toString().trim();
+                        editor.putString("login_password", edit_password.getText().toString().trim());
+                        editor.commit();
 
 
-                    e.printStackTrace();
+                    } catch (Exception e) {
+
+
+                        e.printStackTrace();
+                    }
                 }
             }
         });
-      }
+    }
 
-
+    private Boolean validationSuccess() {
+        if(edit_mobile.getText().toString().equalsIgnoreCase("")){
+            edit_mobile.setError("Cannot be empty");
+            return false;
+        }
+        if(edit_password.getText().toString().equalsIgnoreCase("")){
+            edit_password.setError("Cannot be empty");
+            return false;
+        }
+        return true;
+    }
 
     public void showErrorAlert(String msg) {
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
@@ -163,24 +201,13 @@ public class Login extends AppCompatActivity {
                 //  String str = response.body().toString();
                 JSONObject jsonObject=new JSONObject(result);
                 if (jsonObject.getString("result").contains("success")) {
-                 id=jsonObject.getString("id");
-                 number=jsonObject.getString("mobile");
-//                   try{
-//                       JSONArray jsonArray2 = jsonObject.getJSONArray("kplist");
-//                       for (int i = 0; i < jsonArray2.length(); i++) {
-//                           JSONObject jsonObject3 = jsonArray2.getJSONObject(i);
-//                           id=jsonObject3.getString("id");
-//                            number=jsonObject3.getString("mobile");
-////
-//                       }
-//                   }catch (Exception e){
-//                       e.printStackTrace();
-//                   }
-                    if (number != null) {
+                    id=jsonObject.getString("id");
+                    number=jsonObject.getString("mobile");
+                    if (number.length()>6) {
                         Intent intent = new Intent(Login.this, DrashBoardActivity.class);
                         intent.putExtra("number", number);
                         intent.putExtra("uId", id);
-                 //       intent.putExtra("revision", revisionno);
+                        //       intent.putExtra("revision", revisionno);
                         final SharedPreferences sharedPreferences = PreferenceManager
                                 .getDefaultSharedPreferences(Login.this);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -200,7 +227,7 @@ public class Login extends AppCompatActivity {
                     startActivity(intent);
                 }
                 else if (jsonObject.getString("result").contains("OTP")) {
-                   getmobile();
+                    getmobile();
                 }
             } catch (Exception e) {
                 e.printStackTrace();

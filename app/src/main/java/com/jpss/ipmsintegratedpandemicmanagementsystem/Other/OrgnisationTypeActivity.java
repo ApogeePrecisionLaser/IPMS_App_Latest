@@ -5,6 +5,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -18,6 +19,8 @@ import android.widget.Toast;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.Database.DatabaseOperation;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.Model.GenericModel;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.R;
+import com.jpss.ipmsintegratedpandemicmanagementsystem.services.NetworkChangeReceiver;
+import com.jpss.ipmsintegratedpandemicmanagementsystem.utils.NetworkUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,6 +28,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.jpss.ipmsintegratedpandemicmanagementsystem.data.Constants.CONNECTIVITY_ACTION;
 
 public class OrgnisationTypeActivity extends AppCompatActivity {
     DatabaseOperation dbTask=new DatabaseOperation(this);
@@ -35,6 +40,20 @@ public class OrgnisationTypeActivity extends AppCompatActivity {
     ProgressDialog dialog;
     List<String>orgType=new ArrayList<>();
     Toolbar toolbar;
+    IntentFilter intentFilter;
+    NetworkChangeReceiver receiver;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(receiver, intentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +70,12 @@ public class OrgnisationTypeActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+        intentFilter = new IntentFilter();
+        intentFilter.addAction(CONNECTIVITY_ACTION);
+        receiver = new NetworkChangeReceiver();
 
+        if (NetworkUtil.getConnectivityStatus(OrgnisationTypeActivity.this) > 0 ) System.out.println("Connect");
+        else System.out.println("No connection");
         enterNo=findViewById(R.id.edt_orgmobile);
         typeSpinner=findViewById(R.id.orgTypeSpinner);
         proceed=findViewById(R.id.btnproceeds);
@@ -107,7 +131,7 @@ public class OrgnisationTypeActivity extends AppCompatActivity {
         proceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // getData();
+                // getData();
                 orgMobile=enterNo.getText().toString().trim();
                 Callingregistration callingservcie = new Callingregistration();
                 callingservcie.execute();
@@ -218,7 +242,7 @@ public class OrgnisationTypeActivity extends AppCompatActivity {
                 if (result.contains("true")) {
                     Intent intent = new Intent(OrgnisationTypeActivity.this, OrgOtpActivity.class);
                     intent.putExtra("mobile_no",orgMobile);
-                   // intent.putExtra("id",ids);
+                    // intent.putExtra("id",ids);
                     startActivity(intent);
                     finish();
 
@@ -263,7 +287,5 @@ public class OrgnisationTypeActivity extends AppCompatActivity {
 
         return jsonObject;
     }
-
-
-
+    
 }

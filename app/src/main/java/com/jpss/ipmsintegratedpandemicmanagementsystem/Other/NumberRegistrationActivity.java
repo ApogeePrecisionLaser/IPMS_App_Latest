@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +21,8 @@ import com.jpss.ipmsintegratedpandemicmanagementsystem.Bean.Bean;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.Database.DatabaseOperation;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.Model.GenericModel;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.R;
+import com.jpss.ipmsintegratedpandemicmanagementsystem.services.NetworkChangeReceiver;
+import com.jpss.ipmsintegratedpandemicmanagementsystem.utils.NetworkUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,6 +31,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.jpss.ipmsintegratedpandemicmanagementsystem.data.Constants.CONNECTIVITY_ACTION;
 
 public class NumberRegistrationActivity extends AppCompatActivity implements View.OnClickListener {
     Button btnProceed,btnBack;
@@ -40,7 +45,20 @@ public class NumberRegistrationActivity extends AppCompatActivity implements Vie
     String num;
     List mobileno =new ArrayList();
     public static final String Registernumber = "register";
+    IntentFilter intentFilter;
+    NetworkChangeReceiver receiver;
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(receiver, intentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +74,12 @@ public class NumberRegistrationActivity extends AppCompatActivity implements Vie
                 onBackPressed();
             }
         });
+        intentFilter = new IntentFilter();
+        intentFilter.addAction(CONNECTIVITY_ACTION);
+        receiver = new NetworkChangeReceiver();
 
+        if (NetworkUtil.getConnectivityStatus(NumberRegistrationActivity.this) > 0 ) System.out.println("Connect");
+        else System.out.println("No connection");
         btnProceed=findViewById(R.id.proceeds);
         btnBack=findViewById(R.id.btnback);
         enterMobile=findViewById(R.id.edt_mobile);

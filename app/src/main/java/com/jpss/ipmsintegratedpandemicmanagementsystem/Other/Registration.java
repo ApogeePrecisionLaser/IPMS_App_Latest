@@ -1,19 +1,21 @@
 package com.jpss.ipmsintegratedpandemicmanagementsystem.Other;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-import androidx.preference.PreferenceManager;
 
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -24,7 +26,9 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
@@ -47,6 +51,9 @@ import com.jpss.ipmsintegratedpandemicmanagementsystem.Database.DatabaseOperatio
 import com.jpss.ipmsintegratedpandemicmanagementsystem.E_pass.RouteActivity;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.Model.GenericModel;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.R;
+import com.jpss.ipmsintegratedpandemicmanagementsystem.services.NetworkChangeReceiver;
+import com.jpss.ipmsintegratedpandemicmanagementsystem.utils.NetworkUtil;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,6 +70,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import static com.jpss.ipmsintegratedpandemicmanagementsystem.data.Constants.CONNECTIVITY_ACTION;
+
 public class Registration extends AppCompatActivity {
     DatabaseOperation dbTask = new DatabaseOperation(Registration.this);
     List<String>desigName=new ArrayList<>();
@@ -74,15 +83,18 @@ public class Registration extends AppCompatActivity {
     File mediaFile;
     public static final int RequestPermissionCode = 7;
     EditText name, editText_mobile, email, password, editText_confirmpass;
-    Button btnRegister,btnAddfamily;
+    Button btnRegister,btnAddfamily,send;
     String imagePath = "";
+    Bitmap bitmap;
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     private static final String IMAGE_DIRECTORY_NAME = "Cable";
     public static final int MEDIA_TYPE_VIDEO = 2;
     public static final int MEDIA_TYPE_IMAGE = 1;
     String secondimage;
-    private Uri fileUri;
+    Uri fileUri;
     File dir;
+    public static final String Registernumber = "register";
+
     SharedPreferences sharedpreferences;
     public static final String MyPREFERENCES = "MyPrefs";
     ProgressDialog dialog;
@@ -93,8 +105,6 @@ public class Registration extends AppCompatActivity {
     ImageButton buttonAdd;
     LinearLayout container, imagelayout, imageLayout1;
     String ip, port;
-    public static final String Registernumber = "register";
-
     String latitude, longitude;
     Map<String, String> map = new HashMap<String, String>();
     ArrayList<String> arrayList = new ArrayList();
@@ -121,6 +131,22 @@ public class Registration extends AppCompatActivity {
     Spinner famuser_id;
     TextView designationName;
     EditText fam_userIdentityNo;
+    Context mcontext;
+    IntentFilter intentFilter;
+    NetworkChangeReceiver receiver;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(receiver, intentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,7 +162,12 @@ public class Registration extends AppCompatActivity {
                 onBackPressed();
             }
         });
+        intentFilter = new IntentFilter();
+        intentFilter.addAction(CONNECTIVITY_ACTION);
+        receiver = new NetworkChangeReceiver();
 
+        if (NetworkUtil.getConnectivityStatus(Registration.this) > 0 ) System.out.println("Connect");
+        else System.out.println("No connection");
         editText_mobile = findViewById(R.id.editText_mobile);
         String code = "+91 ";
         editText_mobile.setCompoundDrawablesWithIntrinsicBounds(new TextDrawable(code), null, null, null);
@@ -170,6 +201,7 @@ public class Registration extends AppCompatActivity {
                 .getDefaultSharedPreferences(this);
 
         moblieno = sharedPreferences.getString(Registernumber, "default value");
+        checkRunTimePermission();
         fatherName.addTextChangedListener(textWatcher);
         dbTask.open();
 
@@ -180,9 +212,8 @@ public class Registration extends AppCompatActivity {
             office_id = officeDetail.split(",")[0];
             office_Name = officeDetail.split(",")[1];
             desig_spinner.setVisibility(View.VISIBLE);
-                officeName.setText(office_Name);
-        }
-        else {
+            officeName.setText(office_Name);
+        }else {
             editText_mobile.setEnabled(true);
             officeName.setText("family");
             designationName.setVisibility(View.VISIBLE);
@@ -227,12 +258,17 @@ public class Registration extends AppCompatActivity {
                 if (validationSuccess()) {
                     connection();
                     GPSTrack gpsTrack = new GPSTrack(Registration.this);
-
-                    longitude = String.valueOf(gpsTrack.getLongitude());
                     latitude = String.valueOf(gpsTrack.getLatitude());
-                   // getdata();
-                    Callingservcie callingservcie = new Callingservcie();
-                    callingservcie.execute();
+                    longitude= String.valueOf(gpsTrack.getLongitude());
+                    //  getdata();
+                    if(latitude.equals("0.0") && longitude.equals("0.0")){
+                        Toast.makeText(Registration.this, "Please on your GPS location!", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Callingservcie callingservcie = new Callingservcie();
+                        callingservcie.execute();
+                    }
+
                 }
 
                 else {
@@ -369,7 +405,75 @@ public class Registration extends AppCompatActivity {
         });
 
     }
+    public void checkRunTimePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ActivityCompat.checkSelfPermission(Registration.this,  Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+                    ActivityCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED||
+                    ActivityCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                GPSTrack gpsTrack = new GPSTrack(Registration.this);
 
+            } else {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                        10);
+            }
+        } else {
+            GPSTrack gpsTrack = new GPSTrack(Registration.this);
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 10) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                GPSTrack gpsTrack = new GPSTrack(Registration.this);
+            } else {
+                if (!ActivityCompat.shouldShowRequestPermissionRationale(Registration.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    // If User Checked 'Don't Show Again' checkbox for runtime permission, then navigate user to Settings
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(Registration.this);
+                    dialog.setTitle("Permission Required");
+                    dialog.setCancelable(false);
+                    dialog.setMessage("You have to Allow permission to access user location");
+                    dialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package",
+                                    Registration.this.getPackageName(), null));
+                            //i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivityForResult(i, 1001);
+                        }
+                    });
+                    AlertDialog alertDialog = dialog.create();
+                    alertDialog.show();
+                }
+                //code for deny
+            }
+        }
+    }
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        super.startActivityForResult(intent, requestCode);
+        switch (requestCode) {
+            case 1001:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (ActivityCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+                            ActivityCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                            || ActivityCompat.checkSelfPermission(Registration.this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        GPSTrack gpsTrack = new GPSTrack(Registration.this);
+                        if (gpsTrack.canGetLocation()) {
+                            latitude = String.valueOf(gpsTrack.getLatitude());
+                            longitude = String.valueOf(gpsTrack.getLongitude());
+
+                        }
+                    } else {
+                        requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.ACCESS_BACKGROUND_LOCATION},10);
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
     private void getdetail() {
         DatabaseOperation dbTask=new DatabaseOperation(this);
         dbTask.open();
@@ -406,6 +510,7 @@ public class Registration extends AppCompatActivity {
         famUserIdimg=customLayout.findViewById(R.id.famuserId);
         id =customLayout.findViewById(R.id.famid);
         photo =customLayout.findViewById(R.id.famphoto);
+        // send =customLayout.findViewById(R.id.btnfamilysend);
         if(fam_userIdentityNo.getText()!=null) {
             fam_userIdentityNo.setError("Cannot be empty");
         }
@@ -493,7 +598,7 @@ public class Registration extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
-                if (item.equalsIgnoreCase("Family Member"))
+                if (item.equalsIgnoreCase(" Select Family Member-->"))
                     family_member = "";
                 else
                     family_member = item;
@@ -505,26 +610,40 @@ public class Registration extends AppCompatActivity {
             }
         });
 
-
         alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (validationSuccessss()) {
-                    sendData();
 
-
-                }
-
-                else {
-                    Toast.makeText(Registration.this, "Please fill above field", Toast.LENGTH_SHORT).show();
-                }
             }
         });
+
+        /*AlertDialog alert = alertDialog.create();
+        alert.setCanceledOnTouchOutside(false);
+        alert.show();*/
         AlertDialog alert = alertDialog.create();
-        alert.setCanceledOnTouchOutside(true);
         alert.show();
+        Button theButton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
+        theButton.setOnClickListener(new CustomListener(alert));
 
 
+    }
+    class CustomListener implements View.OnClickListener {
+        private final Dialog dialog;
+        public CustomListener(Dialog dialog) {
+            this.dialog = dialog;
+        }
+        @Override
+        public void onClick(View v) {
+            // put your code here
+            if (validationSuccessss()) {
+                sendData();
+                dialog.dismiss();
+            }
+
+            else {
+                Toast.makeText(Registration.this, "Please fill above field", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
     public void imageclicks(View v) {
         if (!isDeviceSupportCamera()) {
@@ -632,14 +751,33 @@ public class Registration extends AppCompatActivity {
                 //viewImage();
                 //viewImage1();
                 ImageView imgview = new ImageView(Registration.this);
-                BitmapFactory.Options options = new BitmapFactory.Options();
+                /*BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 7;
-                Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
+                bitmap = BitmapFactory.decodeFile(imagePath, options);
                 imgview.setImageBitmap(bitmap);
                 // Toast.makeText(getApplicationContext(),""+bitmap, Toast.LENGTH_SHORT).show();
                 Toast.makeText(Registration.this, "Image Captured Successfully..", Toast.LENGTH_SHORT).show();
-                imgview.setImageBitmap(bitmap);
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                imgview.setImageBitmap(bitmap);*/
+
+                BitmapFactory.Options options;
+
+                try {
+                    options=new BitmapFactory.Options();
+                    options.inJustDecodeBounds = false;
+                    bitmap = BitmapFactory.decodeFile(imagePath, options);
+                    imgview.setImageBitmap(bitmap);
+                } catch (OutOfMemoryError e) {
+                    try {
+                        options=new BitmapFactory.Options();
+                        options.inJustDecodeBounds = false;
+                        options.inSampleSize = 7;
+                        bitmap = BitmapFactory.decodeFile(imagePath, options);
+                        imgview.setImageBitmap(bitmap);
+                    } catch (Exception excepetion) {
+                    }
+                }
+                ByteArrayOutputStream stream;
+                stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
                 byte[] byte_arr = stream.toByteArray();
                 String encodedString = Base64.encodeToString(byte_arr, 1);
@@ -883,6 +1021,12 @@ public class Registration extends AppCompatActivity {
             edtaddress2.setError("Cannot be empty");
             return false;
         }
+        else if(edtaddress3.getText().toString().equalsIgnoreCase("")){
+            edtaddress3.setError("Cannot be empty");
+            return false;
+        }
+
+
         else if(fatherName.getText().toString().equalsIgnoreCase("")){
             fatherName.setError("Cannot be empty");
             return false;
@@ -915,6 +1059,18 @@ public class Registration extends AppCompatActivity {
         }
         else if(family_dob.getText().toString().equalsIgnoreCase("")){
             family_dob.setError("Cannot be empty");
+            return false;
+        }
+        else if(family_fatherName.getText().toString().equalsIgnoreCase("")){
+            family_fatherName.setError("Cannot be empty");
+            return false;
+        }
+        else if(family_pass.getText().toString().equalsIgnoreCase("")){
+            family_pass.setError("Cannot be empty");
+            return false;
+        }
+        else if(family_member.matches("")){
+            familySpinner.setPrompt("Cannot be empty");
             return false;
         }
 
@@ -997,8 +1153,9 @@ public class Registration extends AppCompatActivity {
                     Iterator itrr = list.listIterator();
                     while (itrr.hasNext()) {
                         String filePath = (String) itrr.next();
-                        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bitmap = BitmapFactory.decodeFile(filePath);
+                        ByteArrayOutputStream stream;
+                        stream = new ByteArrayOutputStream();
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
                         byte[] byte_arr = stream.toByteArray();
                         String encodedString = Base64.encodeToString(byte_arr, Base64.DEFAULT);
@@ -1116,11 +1273,6 @@ public class Registration extends AppCompatActivity {
         public void afterTextChanged(Editable s) {
         }
     };
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
 }
 
 

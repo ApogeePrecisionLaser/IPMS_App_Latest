@@ -9,6 +9,7 @@ import androidx.core.content.FileProvider;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -34,6 +35,8 @@ import com.jpss.ipmsintegratedpandemicmanagementsystem.Bean.Bean;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.Database.DatabaseOperation;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.Model.GenericModel;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.R;
+import com.jpss.ipmsintegratedpandemicmanagementsystem.services.NetworkChangeReceiver;
+import com.jpss.ipmsintegratedpandemicmanagementsystem.utils.NetworkUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,6 +50,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+
+import static com.jpss.ipmsintegratedpandemicmanagementsystem.data.Constants.CONNECTIVITY_ACTION;
 
 public class ImageActivity extends AppCompatActivity {
     ImageView userImage, UserIdimg;
@@ -65,6 +70,7 @@ public class ImageActivity extends AppCompatActivity {
     public static final int MEDIA_TYPE_IMAGE = 1;
     private Uri fileUri;
     File dir;
+    Bitmap bitmap;
     TextView id, photo;
     public File f;
     String filePath1,secondimage,user_identity;
@@ -76,6 +82,20 @@ public class ImageActivity extends AppCompatActivity {
     String father,dob,officeId,degId,address2,address3;
     ProgressDialog dialog;
     Toolbar toolbar;
+    IntentFilter intentFilter;
+    NetworkChangeReceiver receiver;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(receiver, intentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +111,12 @@ public class ImageActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+        intentFilter = new IntentFilter();
+        intentFilter.addAction(CONNECTIVITY_ACTION);
+        receiver = new NetworkChangeReceiver();
+
+        if (NetworkUtil.getConnectivityStatus(ImageActivity.this) > 0 ) System.out.println("Connect");
+        else System.out.println("No connection");
         userImage = findViewById(R.id.userPhoto);
         UserIdimg = findViewById(R.id.userId);
         id = findViewById(R.id.id);
@@ -150,8 +176,8 @@ public class ImageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                    quarantineidrequest quarantineidrequest = new quarantineidrequest();
-                    quarantineidrequest.execute();
+                quarantineidrequest quarantineidrequest = new quarantineidrequest();
+                quarantineidrequest.execute();
 
             }
         });
@@ -250,7 +276,7 @@ public class ImageActivity extends AppCompatActivity {
 
     private boolean isDeviceSupportCamera() {
         if (ImageActivity.this.getPackageManager().hasSystemFeature(
-                PackageManager.FEATURE_CAMERA)) {
+                PackageManager.FEATURE_CAMERA_ANY)) {
             // this device has a camera
             return true;
         } else {
@@ -268,13 +294,31 @@ public class ImageActivity extends AppCompatActivity {
                 //viewImage();
                 //viewImage1();
                 ImageView imgview = new ImageView(ImageActivity.this);
-                BitmapFactory.Options options = new BitmapFactory.Options();
+                /*BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 7;
-                Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
+                 bitmap = BitmapFactory.decodeFile(imagePath, options);
                 imgview.setImageBitmap(bitmap);
                 // Toast.makeText(getApplicationContext(),""+bitmap, Toast.LENGTH_SHORT).show();
                 Toast.makeText(ImageActivity.this, "Image Captured Successfully..", Toast.LENGTH_SHORT).show();
-                imgview.setImageBitmap(bitmap);
+                imgview.setImageBitmap(bitmap);*/
+                BitmapFactory.Options options;
+
+                try {
+                    options=new BitmapFactory.Options();
+                    options.inJustDecodeBounds = false;
+                    bitmap = BitmapFactory.decodeFile(imagePath, options);
+                    imgview.setImageBitmap(bitmap);
+                } catch (OutOfMemoryError e) {
+                    try {
+                        options=new BitmapFactory.Options();
+                        options.inJustDecodeBounds = false;
+                        options.inSampleSize = 7;
+                        bitmap = BitmapFactory.decodeFile(imagePath, options);
+                        imgview.setImageBitmap(bitmap);
+                    } catch (Exception excepetion) {
+                    }
+                }
+
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
                 byte[] byte_arr = stream.toByteArray();
@@ -357,7 +401,7 @@ public class ImageActivity extends AppCompatActivity {
                     getmobile();
 
 
-                 } else {
+                } else {
                     if (result.contains("failure")) {
                         dialog.dismiss();
                         Toast.makeText(ImageActivity.this, "Not registered .....Register your self.....", Toast.LENGTH_LONG).show();
@@ -416,7 +460,7 @@ public class ImageActivity extends AppCompatActivity {
                 Iterator itrr = list.listIterator();
                 while (itrr.hasNext()) {
                     String filePath = (String) itrr.next();
-                    Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+                    bitmap = BitmapFactory.decodeFile(filePath);
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
                     byte[] byte_arr = stream.toByteArray();
