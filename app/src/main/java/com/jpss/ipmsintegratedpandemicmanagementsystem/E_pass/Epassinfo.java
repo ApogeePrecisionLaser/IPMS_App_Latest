@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -34,11 +35,12 @@ public class Epassinfo extends AppCompatActivity {
     ImageView imageView;
     TextView exprydttxt,validfromtxt,validtotxt,worktyptxt,prsnnm,prsnnum,dtstts;
     Toolbar toolbar;
-    String epsid,ordrmgmtid,vldfrm,vldto;
+    String epsid,ordrmgmtid,vldfrm,vldto,epasstypeid,keypid;
     boolean result = false;
     boolean result2 = false;
     boolean result3 = false;
     LinearLayout dtsttslay;
+    Button dlvrbtn;
 
     DatabaseOperation dbTask = new DatabaseOperation(this);
     public static final String LOGINNUMBER = "loginnumber";
@@ -48,7 +50,7 @@ public class Epassinfo extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_epassinfo);
-
+        dlvrbtn=findViewById(R.id.dlvrbtn);
         toolbar =  findViewById(R.id.tool);
         toolbar.setTitle("EPass Info");
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
@@ -89,6 +91,25 @@ public class Epassinfo extends AppCompatActivity {
                     ordrmgmtid = val.split("_")[7];
                     vldfrm = val.split("_")[8];
                     vldto = val.split("_")[9];
+                    epasstypeid = val.split("_")[10];
+                    keypid = val.split("_")[11];
+
+                    if(epasstypeid!=null){
+                      String epasstype =  dbTask.getepasstype(epasstypeid);
+                      if(epasstype.equalsIgnoreCase("Duty")){
+                          dlvrbtn.setVisibility(View.INVISIBLE);
+                      }else if(epasstype.equalsIgnoreCase("Transition")){
+
+                      }else if(epasstype.equalsIgnoreCase("Consumer")){
+                          dlvrbtn.setVisibility(View.VISIBLE);
+                      }else if(epasstype.equalsIgnoreCase("Hospital")){
+
+                      }else{
+                          dlvrbtn.setVisibility(View.VISIBLE);
+                      }
+                    }
+
+
                     Date dateone = null;
                     Date datetwo = null;
                     Date datethree = null;
@@ -135,6 +156,8 @@ public class Epassinfo extends AppCompatActivity {
         if(!vldfrm.equalsIgnoreCase("0.0")  && !vldto.equalsIgnoreCase("0.0")){
             intent.putExtra("FromLoc",vldfrm);
             intent.putExtra("ToLoc",vldto);
+            intent.putExtra("epassid",epsid);
+            intent.putExtra("kpid",keypid);
             startActivity(intent);
         }else{
             Toast.makeText(this, "Location is Missing", Toast.LENGTH_SHORT).show();

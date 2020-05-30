@@ -29,8 +29,9 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_marginTop="20dp"
                 android:id="@+id/prsnlimg"
+                app:civ_border_color="#FFFFFF"
+                app:civ_border_width="2dp"
                 android:layout_gravity="center_horizontal"
-                android:background="@mipmap/ic_launcher"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                />
@@ -156,7 +157,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_gravity="center"
-        android:layout_marginTop="45dp">
+        android:layout_marginTop="4dp">
         <LinearLayout
             android:orientation="horizontal"
             android:paddingLeft="25dp"
@@ -194,25 +195,6 @@
                 android:id="@+id/numprsnl"
                 android:paddingLeft="20dp"
                 android:text="+91 7004252044"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_marginTop="25dp"
-            android:orientation="horizontal"
-            android:paddingLeft="25dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/ic_work_black_24dp"/>
-            <TextView
-                android:textStyle="bold"
-                android:id="@+id/prsnlwtyp"
-                android:layout_gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
-                android:text="Work Type"/>
         </LinearLayout>
         <LinearLayout
             android:layout_marginTop="25dp"

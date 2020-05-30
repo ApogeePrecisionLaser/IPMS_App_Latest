@@ -260,6 +260,7 @@ public class DatabaseWrapper extends SQLiteOpenHelper {
             + " qrpath TEXT DEFAULT NULL,"
             + " status_id INTEGER DEFAULT NULL,"
             + " order_mgmt_id INTEGER DEFAULT NULL,"
+            + " epasstype_id INTEGER DEFAULT NULL,"
             + " mobile_no1 TEXT DEFAULT NULL,"
             + " android_image_path TEXT DEFAULT NULL,"
             + " active TEXT  NOT NULL DEFAULT 'Y',"
@@ -268,7 +269,65 @@ public class DatabaseWrapper extends SQLiteOpenHelper {
             + "  timestamp TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,"
             + "  FOREIGN KEY (work_type_id) REFERENCES Work_type (work_type_id),"
             + "  FOREIGN KEY (key_person_id) REFERENCES Key_person (key_person_id),"
-            + "  FOREIGN KEY (status_id) REFERENCES status (status_id)"
+            + "  FOREIGN KEY (status_id) REFERENCES status (status_id),"
+            + "  FOREIGN KEY (epasstype_id) REFERENCES Epass_type (epasstype_id)"
+            + ");";
+
+    /*Created By Abhijeet at 29 may 2020*/
+
+    private static final String epasslivedetailsquery = " CREATE TABLE E_pass_live_details ("
+            + " e_pass_live_id  INTEGER PRIMARY KEY autoincrement,"
+            + " e_pass_id INTEGER DEFAULT NULL,"
+            + " kpid INTEGER DEFAULT NULL,"
+            + " latitude TEXT DEFAULT NULL,"
+            + " longitude TEXT DEFAULT NULL,"
+            + " accuracy TEXT DEFAULT NULL,"
+            + " epass_status_id INTEGER DEFAULT NULL,"
+            + " is_movement TEXT DEFAULT NULL,"
+            + " active TEXT  NOT NULL DEFAULT 'Y',"
+            + " remark TEXT DEFAULT NULL,"
+            + " revision_no INTEGER DEFAULT NULL,"
+            + "  timestamp TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,"
+            + "  FOREIGN KEY (e_pass_id) REFERENCES E_pass (e_pass_id),"
+            + "  FOREIGN KEY (epass_status_id) REFERENCES Epass_status (epass_status_id)"
+            + ");";
+
+    private static final String violationtypequery = " CREATE TABLE violation_type ("
+            + " violation_type_id  INTEGER PRIMARY KEY autoincrement,"
+            + " violation_name TEXT DEFAULT NULL,"
+            + " remark TEXT DEFAULT NULL,"
+            + " active TEXT  NOT NULL DEFAULT 'Y',"
+            + " timestamp TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP"
+            + ");";
+
+    private static final String epassviolationquery = " CREATE TABLE Epass_violation ("
+            + " epass_violation_id  INTEGER PRIMARY KEY autoincrement,"
+            + " violation_type_id INTEGER DEFAULT NULL,"
+            + " e_pass_live_id INTEGER DEFAULT NULL,"
+            + " remark TEXT DEFAULT NULL,"
+            + " active TEXT  NOT NULL DEFAULT 'Y',"
+            + " timestamp TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,"
+            + "  FOREIGN KEY (e_pass_live_id) REFERENCES E_pass_live_details (e_pass_live_id),"
+            + "  FOREIGN KEY (violation_type_id) REFERENCES violation_type (violation_type_id)"
+            + ");";
+
+    private static final String epassstatusquery = " CREATE TABLE Epass_status ("
+            + " epass_status_id  INTEGER PRIMARY KEY autoincrement,"
+            + " epass_status TEXT DEFAULT NULL,"
+            + " remark TEXT DEFAULT NULL,"
+            + " active TEXT  NOT NULL DEFAULT 'Y',"
+            + " timestamp TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP"
+            + ");";
+
+
+    /*This four table for epass tracking*/
+
+    private static final String epasstypequery = " CREATE TABLE Epass_type ("
+            + " epasstype_id  INTEGER PRIMARY KEY autoincrement,"
+            + " epass_type TEXT DEFAULT NULL,"
+            + " remark TEXT DEFAULT NULL,"
+            + " active TEXT  NOT NULL DEFAULT 'Y',"
+            + " timestamp TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP"
             + ");";
 
 
@@ -401,6 +460,7 @@ public class DatabaseWrapper extends SQLiteOpenHelper {
                     db.execSQL(organisationtypequery);
                     db.execSQL(worktypequery);
                     db.execSQL(epassquery);
+                    db.execSQL(epasstypequery);
                     db.execSQL(quarantinequery);
                     db.execSQL(quarantinereasonquery);
                     db.execSQL(medical_record_symptoms_mapping);
@@ -425,6 +485,10 @@ public class DatabaseWrapper extends SQLiteOpenHelper {
                     db.execSQL(corona_contact_listquery);
                     db.execSQL(point_of_contactquery);
                     db.execSQL(family_tablequery);
+                    db.execSQL(epasslivedetailsquery);
+                    db.execSQL(violationtypequery);
+                    db.execSQL(epassviolationquery);
+                    db.execSQL(epassstatusquery);
                     result = true;
                 } catch (Exception e) {
                     result = false;
@@ -469,6 +533,11 @@ public class DatabaseWrapper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS corona_contact_list");
         db.execSQL("DROP TABLE IF EXISTS point_of_contacted");
         db.execSQL("DROP TABLE IF EXISTS family");
+        db.execSQL("DROP TABLE IF EXISTS Epass_type");
+        db.execSQL("DROP TABLE IF EXISTS E_pass_live_details");
+        db.execSQL("DROP TABLE IF EXISTS violation_type");
+        db.execSQL("DROP TABLE IF EXISTS Epass_violation");
+        db.execSQL("DROP TABLE IF EXISTS Epass_status");
         onCreate(db);
     }
 }

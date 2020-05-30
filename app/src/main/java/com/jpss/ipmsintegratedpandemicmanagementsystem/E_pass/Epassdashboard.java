@@ -28,12 +28,13 @@ public class Epassdashboard extends AppCompatActivity implements View.OnClickLis
     String orgofcid=null;
     DatabaseOperation dbTask = new DatabaseOperation(this);
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_epassdashboard);
-
+        epasstype();
+        violationtype();
+        epassstatus();
         re_Epassrqst=findViewById(R.id.re_epass);
         re_epassshow=findViewById(R.id.re_quarantine);
         re_vendor=findViewById(R.id.re_document);
@@ -45,7 +46,7 @@ public class Epassdashboard extends AppCompatActivity implements View.OnClickLis
         final SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(this);
         String numm = sharedPreferences.getString(LOGINNUMBER, "default value");
-        dbTask.open();
+
         ArrayList<String> keydetail = new ArrayList<>();
         String kpidandlocation = dbTask.getkpidandlocation(numm);
         String keyprsnid = kpidandlocation.split(",")[0];
@@ -86,6 +87,57 @@ public class Epassdashboard extends AppCompatActivity implements View.OnClickLis
                 Intent intent2=new Intent(Epassdashboard.this, Vendorrqstlist.class);
                 startActivity(intent2);
                 break;
+
+        }
+    }
+
+    private void epasstype(){
+        dbTask.open();
+        ArrayList<String> myValues = new ArrayList<String>();
+        myValues.add("1,Duty,Abhi");
+        myValues.add("2,Transition,Abhi");
+        myValues.add("3,Consumer,Abhi");
+        myValues.add("4,Hospital,Abhi");
+
+        for(int i = 0; i < myValues.size(); i++){
+            String val = myValues.get(i);
+            String epasstypeid = val.split(",")[0];
+            String epasstype = val.split(",")[1];
+            String remark = val.split(",")[2];
+
+            dbTask.insertEpasstype(epasstypeid,epasstype,remark);
+
+        }
+    }
+
+    private void violationtype(){
+        dbTask.open();
+        ArrayList<String> myValues = new ArrayList<String>();
+        myValues.add("1,Off Road");
+        myValues.add("2,Network issue");
+
+        for(int i = 0; i < myValues.size(); i++){
+            String val = myValues.get(i);
+            String violationtypeid = val.split(",")[0];
+            String violationname = val.split(",")[1];
+
+            dbTask.insertviolationtype(violationtypeid,violationname);
+
+        }
+    }
+
+    private void epassstatus(){
+        dbTask.open();
+        ArrayList<String> myValues = new ArrayList<String>();
+        myValues.add("1,On Road");
+        myValues.add("2,In building");
+
+        for(int i = 0; i < myValues.size(); i++){
+            String val = myValues.get(i);
+            String epassstatusid = val.split(",")[0];
+            String epassstatus = val.split(",")[1];
+
+            dbTask.insertepassstatus(epassstatusid,epassstatus);
 
         }
     }

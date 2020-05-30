@@ -444,6 +444,105 @@ public class DatabaseOperation {
     }
 
 
+    public long insertEpasstype(String id, String epasstype,String remark) {
+        long result = 0;
+        try {
+            database.beginTransaction();
+            ContentValues values = new ContentValues();
+            values.put("epasstype_id",id);
+            values.put("epass_type", epasstype);
+            values.put("remark", remark);
+
+
+            result = database.replace("Epass_type", null, values);
+
+            if (result > 0) {
+                database.setTransactionSuccessful();
+            }
+        }
+        catch (Exception e) {
+            Log.e(TAG, "insertcommand error: " + e);
+        } finally {
+            database.endTransaction();
+        }
+        return result;
+    }
+
+    public long insertepasslivedata(String epid,String kid,Double lat, Double lon, Double acc,String epsttsid, String ismvmnt) {
+        long result = 0;
+        try {
+            database.beginTransaction();
+            ContentValues values = new ContentValues();
+            values.put("e_pass_id",epid);
+            values.put("kpid", kid);
+            values.put("latitude", lat);
+            values.put("longitude", lon);
+            values.put("accuracy", acc);
+            values.put("epass_status_id", epsttsid);
+            values.put("is_movement", ismvmnt);
+
+
+
+            result = database.replace("E_pass_live_details", null, values);
+
+            if (result > 0) {
+                database.setTransactionSuccessful();
+            }
+        }
+        catch (Exception e) {
+            Log.e(TAG, "insertcommand error: " + e);
+        } finally {
+            database.endTransaction();
+        }
+        return result;
+    }
+
+    public long insertviolationtype(String id, String vltnnm) {
+        long result = 0;
+        try {
+            database.beginTransaction();
+            ContentValues values = new ContentValues();
+            values.put("violation_type_id",id);
+            values.put("violation_name", vltnnm);
+
+
+            result = database.replace("violation_type", null, values);
+
+            if (result > 0) {
+                database.setTransactionSuccessful();
+            }
+        }
+        catch (Exception e) {
+            Log.e(TAG, "insertcommand error: " + e);
+        } finally {
+            database.endTransaction();
+        }
+        return result;
+    }
+
+    public long insertepassstatus(String id, String epssts) {
+        long result = 0;
+        try {
+            database.beginTransaction();
+            ContentValues values = new ContentValues();
+            values.put("epass_status_id",id);
+            values.put("epass_status", epssts);
+
+
+            result = database.replace("Epass_status", null, values);
+
+            if (result > 0) {
+                database.setTransactionSuccessful();
+            }
+        }
+        catch (Exception e) {
+            Log.e(TAG, "insertcommand error: " + e);
+        } finally {
+            database.endTransaction();
+        }
+        return result;
+    }
+
     public long insertOrgvalue() {
         long result = 0;
         try {
@@ -468,7 +567,7 @@ public class DatabaseOperation {
         return result;
     }
 
-    public long insertEpassDetails(String epsid ,String vldfrmdt,  String vldtodt  ,String dlvryprsn, String mobno,String wtypid , String qrpath,String ordrmgmtid,String frmlctn,String tolctn) {
+    public long insertEpassDetails(String epsid ,String vldfrmdt,  String vldtodt  ,String dlvryprsn, String mobno,String wtypid , String qrpath,String ordrmgmtid,String frmlctn,String tolctn,String kpid , String ePassType_id) {
         long result = 0;
         try {
             database.beginTransaction();
@@ -483,6 +582,8 @@ public class DatabaseOperation {
             values.put("order_mgmt_id",ordrmgmtid);
             values.put("valid_from_location",frmlctn);
             values.put("valid_to_location",tolctn);
+            values.put("key_person_id",kpid);
+            values.put("epasstype_id",ePassType_id);
             // result = database.replace("E_pass", null, values);
 
             int id = getepassid(epsid);
@@ -709,8 +810,10 @@ public class DatabaseOperation {
         String ordrmgmtid=null;
         String validfromlocation=null;
         String validtolocation=null;
+        String epasstypeid=null;
+        String kpid=null;
         try {
-            Cursor cursor = database.rawQuery("SELECT e_pass_id,valid_from_DATETIME,valid_to_datetime,qrpath,work_type_id,delievery_person,mobile_no1,order_mgmt_id,valid_from_location,valid_to_location FROM E_pass Where e_pass_id =  "+id+"; ", null);
+            Cursor cursor = database.rawQuery("SELECT e_pass_id,valid_from_DATETIME,valid_to_datetime,qrpath,work_type_id,delievery_person,mobile_no1,order_mgmt_id,valid_from_location,valid_to_location,epasstype_id,key_person_id FROM E_pass Where e_pass_id =  "+id+"; ", null);
             cursor.moveToPosition(0);
             int a= cursor.getCount();
             for (int i = 0; i < cursor.getCount(); i++) {
@@ -725,14 +828,32 @@ public class DatabaseOperation {
                 ordrmgmtid=(cursor.getString(7));
                 validfromlocation=(cursor.getString(8));
                 validtolocation=(cursor.getString(9));
+                epasstypeid=(cursor.getString(10));
+                kpid=(cursor.getString(11));
 
-                String val = e_pass_id+"_"+validfrom+"_"+validto+"_"+qrpath+"_"+worktype+"_"+delievery_person+"_"+mobile_no1+"_"+ordrmgmtid+"_"+validfromlocation+"_"+validtolocation;
+                String val = e_pass_id+"_"+validfrom+"_"+validto+"_"+qrpath+"_"+worktype+"_"+delievery_person+"_"+mobile_no1+"_"+ordrmgmtid+"_"+validfromlocation+"_"+validtolocation+"_"+epasstypeid+"_"+kpid;
                 list.add(val);
             }
         } catch (Exception e) {
             Log.e(TAG, "getItemData error: " + e);
         }
         return list;
+    }
+
+    public String getepasstype(String orgofcid) {
+        String epasstype=null;
+        try {
+            Cursor cursor = database.rawQuery("SELECT epass_type FROM Epass_type WHERE epasstype_id = "+orgofcid+" ", null);
+            cursor.moveToPosition(0);
+            int a= cursor.getCount();
+            for (int i = 0; i < cursor.getCount(); i++) {
+                cursor.moveToPosition(i);
+                epasstype = cursor.getString(0);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "getItemData error: " + e);
+        }
+        return epasstype;
     }
 
     public ArrayList<String> getworktype(int id) {
@@ -912,6 +1033,21 @@ public class DatabaseOperation {
     public boolean deletetask(String time){
         try {
             database.execSQL("DELETE FROM " + "E_pass" + " WHERE  qr_code = '" + time + "'");
+            // database.execSQL("DELETE FROM " + "project_table" + " WHERE " + "Project_name" + "= '" + name + "'");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+       /*
+        database.rawQuery("DELETE FROM device_command_map",null);*/
+        return true;
+    }
+
+
+    public boolean deleteepassdata(String time){
+        try {
+            String sql = "DELETE FROM E_pass WHERE (timestamp <= datetime('now', '-7 days'))";
+            database.execSQL(sql);
             // database.execSQL("DELETE FROM " + "project_table" + " WHERE " + "Project_name" + "= '" + name + "'");
         }catch (Exception e){
             e.printStackTrace();

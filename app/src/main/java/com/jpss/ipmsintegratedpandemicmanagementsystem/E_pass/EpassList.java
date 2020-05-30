@@ -35,8 +35,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class EpassList extends AppCompatActivity {
 
@@ -79,12 +83,16 @@ public class EpassList extends AppCompatActivity {
                 String epsid = val.split(",")[0];
                 String dlvryboynm = val.split(",")[1];
                 String mobno = val.split(",")[2];
-                myValues.add(epsid+"_Delivery Boy="+dlvryboynm+"_Mob no="+mobno);
+                myValues.add(epsid+"_Person="+dlvryboynm+"_Mob no="+mobno);
             }
         }else{
             Toast.makeText(this, "No any Epass found", Toast.LENGTH_SHORT).show();
         }
 
+
+        /*String sql = "DELETE FROM myTable WHERE Save_Date <= date('now','-2 day')";
+        DELETE FROM update_log WHERE timestamp <= strftime('%s', datetime('now', '-2 day'));
+          db.execSQL(sql);*/
 
 
         toolbar =  findViewById(R.id.tool);
@@ -105,6 +113,22 @@ public class EpassList extends AppCompatActivity {
                 return false;
             }
         });
+
+       /*SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        String currentDateandTime = sdf.format(new Date());
+        Date myDate = null;
+        try {
+            myDate = sdf.parse(currentDateandTime);
+            int minus = 24 * 60 * 60 * 1000;
+            Date newDate = new Date(myDate.getTime() - minus); //  24 * 60 * 60 * 1000
+            String date = sdf.format(newDate);
+            dbTask.deleteepassdata(date);
+            System.out.println(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }*/
+
+
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,11 +198,12 @@ public class EpassList extends AppCompatActivity {
                     String work_type = json2.getString("work_type");
                     String qr_base64 = json2.getString("qr_base64");
                     String ordrmgmtid = json2.getString("order_mgmt_id");
+                    String ePassType_id = json2.getString("ePassType_id");
                     byte[] imageAsBytes = Base64.decode(qr_base64.getBytes(), Base64.DEFAULT);
                     Bitmap bitmap = (BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length));
                     String imgpath = saveImage(bitmap);
 
-                    long resultt = dbTask.insertEpassDetails(ePassID, fromdate, to_date,delivery_boy,mobile_no,work_type,imgpath,ordrmgmtid,frmlctn,to_location);
+                    long resultt = dbTask.insertEpassDetails(ePassID, fromdate, to_date,delivery_boy,mobile_no,work_type,imgpath,ordrmgmtid,from_location,to_location,kpid,ePassType_id);
                     if (resultt > 0) {
                         System.out.println("Data inserted");
                         finish();

@@ -370,6 +370,7 @@
                     android:layout_height="match_parent">
                     <Button
                         android:textColor="#fff"
+                        android:id="@+id/dlvrbtn"
                         android:background="@drawable/buttonstyle"
                         android:layout_marginTop="0dp"
                         android:onClick="dlvrd"

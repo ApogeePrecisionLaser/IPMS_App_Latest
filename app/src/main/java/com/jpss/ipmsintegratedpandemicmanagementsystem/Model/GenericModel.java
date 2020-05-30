@@ -840,6 +840,53 @@ public class GenericModel
         return jsonObject;
     }
 
+
+    public String sendepasslivedata(JSONObject json) {
+        long result = 0;
+        HttpResponse response = null;
+        JSONObject jsonObject = null;
+        String data = "";
+        try {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+            HttpPost httppost = null;
+
+            final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+
+            String ipp = sharedPreferences.getString(IP, null);
+            String pprt = sharedPreferences.getString(PORT, null);
+            server_ip = ipp;
+            port = pprt;
+            //http://120.138.10.146:8084/apiIPMS/apiServices/saveEPassLiveData
+            if (server_ip!=null || port!=null){
+                if(port.equalsIgnoreCase("8084")){
+                    httppost = new HttpPost("http://" + server_ip + ":" + port + "/apiIPMS/apiServices/saveEPassLiveData");
+                }else{
+                    httppost = new HttpPost("http://" + server_ip + ":" + port + "/ipms/apiIPMS/apiServices/saveEPassLiveData");
+                }
+
+            }else {
+                httppost = new HttpPost("http://" + "120.138.10.146" + ":" + "8080" + "/ipms/apiIPMS/apiServices/saveEPassLiveData");
+            }
+            HttpParams httpParameters = new BasicHttpParams();
+            HttpClient httpClient = new DefaultHttpClient(httpParameters);
+            httppost.setHeader("Content-type", "application/json");
+            httppost.setEntity(new StringEntity(json.toString() , "UTF-8"));
+            try {
+                response = httpClient.execute(httppost);
+                //data = EntityUtils.toString(response.getEntity());
+                jsonObject = processHttpResponse(response);
+            } catch (Exception e) {
+                Log.e(TAG, "Error in http execute " + e);
+            }
+            httpClient.getConnectionManager().shutdown();
+        } catch (Exception e) {
+            Log.e(TAG, "Error in http connection " + e.toString());
+        }
+        return data;
+    }
+
     public JSONObject requestordrmngmntdata(String orgtpnm) {
         long result = 0;
         HttpResponse response = null;
