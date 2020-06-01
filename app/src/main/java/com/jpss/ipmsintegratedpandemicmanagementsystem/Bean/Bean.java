@@ -1,5 +1,7 @@
 package com.jpss.ipmsintegratedpandemicmanagementsystem.Bean;
 
+import com.jpss.ipmsintegratedpandemicmanagementsystem.E_pass.RouteActivity;
+
 public class Bean {
     String organisation_type_id;
     String description;
@@ -20,6 +22,18 @@ public class Bean {
     String famEmergency_name;
     String famEmergency_mobilen;
     String famBlood_group;
+
+    public String getViolationid() {
+        return violationid;
+    }
+
+    public void setViolationid(String violationid) {
+        RouteActivity routeActivity = new RouteActivity();
+        routeActivity.violationtypedataentry();
+        this.violationid = violationid;
+    }
+
+    String violationid;
 
     public String getFamKeypersonid() {
         return famKeypersonid;

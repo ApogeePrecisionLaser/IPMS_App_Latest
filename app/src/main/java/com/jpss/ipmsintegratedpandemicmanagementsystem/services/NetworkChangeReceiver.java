@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.jpss.ipmsintegratedpandemicmanagementsystem.E_pass.RouteActivity;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.R;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.data.Constants;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.utils.NetworkUtil;
@@ -36,7 +37,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
             Log.e("Receiver ", "connected to internet");//your code when internet connection come back
             check="connected to internet";
         }
-       // MainActivity.addLogText(status);
+        RouteActivity.addLogText(status);
 
     }
 
@@ -56,9 +57,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
                 }
             }
         });
-
         dialog.show();
         // if button is clicked, close the custom dialog
-
     }
 }

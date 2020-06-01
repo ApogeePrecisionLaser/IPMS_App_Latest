@@ -497,6 +497,27 @@ public class DatabaseOperation {
         return result;
     }
 
+    public long insertviolation(String vltntpid,String epslvid) {
+        long result = 0;
+        try {
+            database.beginTransaction();
+            ContentValues values = new ContentValues();
+            values.put("violation_type_id",vltntpid);
+            values.put("e_pass_live_id", epslvid);
+            result = database.replace("Epass_violation", null, values);
+
+            if (result > 0) {
+                database.setTransactionSuccessful();
+            }
+        }
+        catch (Exception e) {
+            Log.e(TAG, "insertcommand error: " + e);
+        } finally {
+            database.endTransaction();
+        }
+        return result;
+    }
+
     public long insertviolationtype(String id, String vltnnm) {
         long result = 0;
         try {
@@ -1017,6 +1038,22 @@ public class DatabaseOperation {
         int ordrmngmnt=-1;
         try {
             Cursor cursor = database.rawQuery("SELECT e_pass_id FROM E_pass WHERE e_pass_id = "+id+"", null);
+            cursor.moveToPosition(0);
+            int a= cursor.getCount();
+            for (int i = 0; i < cursor.getCount(); i++) {
+                cursor.moveToPosition(i);
+                ordrmngmnt = cursor.getInt(0);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "getItemData error: " + e);
+        }
+        return ordrmngmnt;
+    }
+
+    public int getlastindex() {
+        int ordrmngmnt=0;
+        try {
+            Cursor cursor = database.rawQuery("SELECT e_pass_live_id FROM E_pass_live_details ORDER BY e_pass_live_id DESC LIMIT 1", null);
             cursor.moveToPosition(0);
             int a= cursor.getCount();
             for (int i = 0; i < cursor.getCount(); i++) {

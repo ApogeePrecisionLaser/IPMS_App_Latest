@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -26,10 +27,12 @@ import com.ankushgrover.hourglass.Hourglass;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.maps.android.PolyUtil;
+import com.jpss.ipmsintegratedpandemicmanagementsystem.Bean.Bean;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.Database.DatabaseOperation;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.Model.GenericModel;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.Other.DrashBoardActivity;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.Other.GPSTrack;
+import com.jpss.ipmsintegratedpandemicmanagementsystem.Other.MainActivity;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -40,6 +43,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.jpss.ipmsintegratedpandemicmanagementsystem.services.NetworkChangeReceiver;
+import com.jpss.ipmsintegratedpandemicmanagementsystem.utils.NetworkUtil;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -67,6 +72,8 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import static com.jpss.ipmsintegratedpandemicmanagementsystem.data.Constants.CONNECTIVITY_ACTION;
+
 public class RouteActivity extends FragmentActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
     ArrayList markerPoints= new ArrayList();
@@ -82,11 +89,27 @@ public class RouteActivity extends FragmentActivity implements OnMapReadyCallbac
     String violtnid="";
     LocationManager lm;
     String onpath=null;
-    String networkissue=null;
+    static String violationid=null;
     String inbuildig=null;
     String ismovement=null;
     boolean checktime = false;
     boolean offroute = false;
+    private static String log_str;
+
+    IntentFilter intentFilter;
+    NetworkChangeReceiver receiver;
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(receiver, intentFilter);
+        violationtypedataentry();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+    }
 
 
 
@@ -98,6 +121,10 @@ public class RouteActivity extends FragmentActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        intentFilter = new IntentFilter();
+        intentFilter.addAction(CONNECTIVITY_ACTION);
+        receiver = new NetworkChangeReceiver();
+        addLogText(NetworkUtil.getConnectivityStatusString(RouteActivity.this));
         Intent intent = getIntent();
         String frmlc = intent.getStringExtra("FromLoc");
         String Tolc = intent.getStringExtra("ToLoc");
@@ -153,6 +180,15 @@ public class RouteActivity extends FragmentActivity implements OnMapReadyCallbac
 
     }
 
+    public static void addLogText(String log)
+    {
+       System.out.print(log);
+       if(log.contains("NOT_CONNECT")){
+           violationid="1";
+       }else{
+           violationid="3";
+       }
+    }
 
     public void drawpoint(Double lati,Double longi){
 
@@ -452,10 +488,6 @@ public class RouteActivity extends FragmentActivity implements OnMapReadyCallbac
             onpath="2";
         }
 
-        if(offroute==true){
-            //violationid=1
-        }
-
     }
 
     private void sendjsonepasslive(String epid,String kid,Double lat, Double lon, Double acc,String epsttsid, String ismvmnt){
@@ -481,6 +513,14 @@ public class RouteActivity extends FragmentActivity implements OnMapReadyCallbac
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void violationtypedataentry(){
+        DatabaseOperation dbtask = new DatabaseOperation(this);
+        dbtask.open();
+        int epslvid = dbtask.getlastindex();
+        dbtask.insertviolation(violationid, String.valueOf(epslvid));
+
     }
 
     public String calculatedistance(double lat1, double lat2, double lon1, double lon2) {
@@ -549,6 +589,7 @@ public class RouteActivity extends FragmentActivity implements OnMapReadyCallbac
             public void onLocationChanged(Location location) {
                 // TODO Auto-generated method stub
                 timer();
+                epassviolationentry();
                 double latttt = location.getLatitude();
                 double lon = location.getLongitude();
                 double speed = location.getSpeed();
@@ -560,6 +601,8 @@ public class RouteActivity extends FragmentActivity implements OnMapReadyCallbac
                 boolean isLocationOnPath = PolyUtil.isLocationOnPath(india, points, true, tolerance);
                 if(isLocationOnPath == false){
                     offroute=true;
+                    violationid="2";
+                    violationtypedataentry();
                     showCustomDialog();
                 }else if(isLocationOnPath ==true){
                     offroute=false;
@@ -599,6 +642,7 @@ public class RouteActivity extends FragmentActivity implements OnMapReadyCallbac
             public void onTimerFinish() {
                 // Timer finished
                 checktime=false;
+                epassviolationentry();
                // Toast.makeText(RouteActivity.this, "Timer finished", Toast.LENGTH_SHORT).show();
 
 

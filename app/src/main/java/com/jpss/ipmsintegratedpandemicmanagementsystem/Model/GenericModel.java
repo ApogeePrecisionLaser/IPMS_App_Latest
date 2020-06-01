@@ -875,7 +875,9 @@ public class GenericModel
             httppost.setEntity(new StringEntity(json.toString() , "UTF-8"));
             try {
                 response = httpClient.execute(httppost);
-                //data = EntityUtils.toString(response.getEntity());
+               /* HttpEntity entity = response.getEntity();
+                data = EntityUtils.toString(entity);*/
+                data = EntityUtils.toString(response.getEntity());
                 jsonObject = processHttpResponse(response);
             } catch (Exception e) {
                 Log.e(TAG, "Error in http execute " + e);
