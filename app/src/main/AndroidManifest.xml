@@ -24,7 +24,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".E_pass.PlacesActivity"></activity>
+        <activity android:name=".E_pass.Appointmentinfo"></activity>
+        <activity android:name=".E_pass.IncomingAppointment" />
+        <activity android:name=".E_pass.AppointmentActivity" />
+        <activity android:name=".E_pass.PlacesActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

@@ -564,6 +564,35 @@ public class DatabaseOperation {
         return result;
     }
 
+
+    public long insertincomingapntmnt(String epsid,String location,String kpnm, String vldfrm, String vldto, String wrktp, String stts) {
+        long result = 0;
+        try {
+            database.beginTransaction();
+            ContentValues values = new ContentValues();
+            values.put("e_pass_id",epsid );
+            values.put("location",location );
+            values.put("kp_personname", kpnm);
+            values.put("valid_from", vldfrm);
+            values.put("valid_to", vldto);
+            values.put("work_type", wrktp);
+            values.put("status", stts);
+
+
+            result = database.replace("Appointment_epass_details", null, values);
+
+            if (result > 0) {
+                database.setTransactionSuccessful();
+            }
+        }
+        catch (Exception e) {
+            Log.e(TAG, "insertcommand error: " + e);
+        } finally {
+            database.endTransaction();
+        }
+        return result;
+    }
+
     public long insertOrgvalue() {
         long result = 0;
         try {
@@ -817,6 +846,60 @@ public class DatabaseOperation {
         return list;
     }
 
+    public ArrayList<String> getappointmentlist() {
+        ArrayList<String> list = new ArrayList<String>();
+        String e_pass_id=null;
+        String kp_personname=null;
+        String location=null;
+        try {
+            Cursor cursor = database.rawQuery("SELECT e_pass_id,kp_personname,location FROM Appointment_epass_details ", null);
+            cursor.moveToPosition(0);
+            int a= cursor.getCount();
+            for (int i = 0; i < cursor.getCount(); i++) {
+                cursor.moveToPosition(i);
+                e_pass_id=(cursor.getString(0));
+                kp_personname=(cursor.getString(1));
+                location=(cursor.getString(2));
+
+                String val = e_pass_id+","+kp_personname+","+location;
+                list.add(val);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "getItemData error: " + e);
+        }
+        return list;
+    }
+
+
+    public ArrayList<String> getappointmentlistinfo(String id) {
+        ArrayList<String> list = new ArrayList<String>();
+        String e_pass_id=null;
+        String kp_personname=null;
+        String location=null;
+        String valid_from=null;
+        String valid_to=null;
+        String work_type=null;
+        try {
+            Cursor cursor = database.rawQuery("SELECT e_pass_id,kp_personname,location,valid_from,valid_to,work_type FROM Appointment_epass_details Where e_pass_id =  "+id+"; ", null);
+            cursor.moveToPosition(0);
+            int a= cursor.getCount();
+            for (int i = 0; i < cursor.getCount(); i++) {
+                cursor.moveToPosition(i);
+                e_pass_id=(cursor.getString(0));
+                kp_personname=(cursor.getString(1));
+                location=(cursor.getString(2));
+                valid_from=(cursor.getString(3));
+                valid_to=(cursor.getString(4));
+                work_type=(cursor.getString(5));
+
+                String val = e_pass_id+","+kp_personname+","+location+","+valid_from+","+valid_to+","+work_type;
+                list.add(val);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "getItemData error: " + e);
+        }
+        return list;
+    }
 
 
     public ArrayList<String> getEpassInfolist(String id) {

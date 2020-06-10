@@ -136,6 +136,87 @@
 
         </androidx.cardview.widget.CardView>
 
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:id="@+id/cd4"
+            android:layout_height="150dp"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@color/colorPrimaryDark"
+            app:cardCornerRadius="30dp"
+            app:cardElevation="20dp"
+            app:contentPadding="10dp">
+            <RelativeLayout
+                android:id="@+id/appointment"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_gravity="center"
+                android:background="@drawable/circle"
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/apnttxt"
+                    style="@style/Base.CardView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:text="Appointment"
+                    android:textSize="20dp" />
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/l3DeviceRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@color/colorPrimaryDark"
+        android:layout_below="@+id/l2DeviceRegister"
+        android:weightSum="2">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:id="@+id/cd5"
+            android:layout_height="150dp"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@color/colorPrimaryDark"
+            app:cardCornerRadius="30dp"
+            app:cardElevation="20dp"
+            app:contentPadding="10dp">
+            <RelativeLayout
+                android:id="@+id/re_incmapt"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_gravity="center"
+                android:background="@drawable/circle"
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/inapt"
+                    style="@style/Base.CardView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:text="Incoming Appointment"
+                    android:textSize="20dp" />
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+
+
+
     </LinearLayout>
 
 </RelativeLayout>
