@@ -307,22 +307,30 @@ public class ImageActivity extends AppCompatActivity {
                     options=new BitmapFactory.Options();
                     options.inJustDecodeBounds = false;
                     bitmap = BitmapFactory.decodeFile(imagePath, options);
+                    options.inDither = true;
+                    options.inPreferredConfig = Bitmap.Config.RGB_565;
                     imgview.setImageBitmap(bitmap);
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+                    byte[] byte_arr = stream.toByteArray();
+                    String encodedString = Base64.encodeToString(byte_arr, 1);
                 } catch (OutOfMemoryError e) {
                     try {
                         options=new BitmapFactory.Options();
                         options.inJustDecodeBounds = false;
                         options.inSampleSize = 7;
+                        options.inDither = true;
+                        options.inPreferredConfig = Bitmap.Config.RGB_565;
                         bitmap = BitmapFactory.decodeFile(imagePath, options);
                         imgview.setImageBitmap(bitmap);
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+                        byte[] byte_arr = stream.toByteArray();
+                        String encodedString = Base64.encodeToString(byte_arr, 1);
                     } catch (Exception excepetion) {
+                        excepetion.printStackTrace();
                     }
                 }
-
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
-                byte[] byte_arr = stream.toByteArray();
-                String encodedString = Base64.encodeToString(byte_arr, 1);
 
                 imgview.requestFocus();
                 imgview.setOnClickListener(new View.OnClickListener() {

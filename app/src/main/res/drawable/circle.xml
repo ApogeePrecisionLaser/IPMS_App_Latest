@@ -14,7 +14,7 @@
         <shape android:shape="oval">
             <!--<solid android:color="#e42828"/>-->
             <gradient
-                android:startColor="#98D61A"
+                android:startColor="@android:color/holo_red_light"
                 android:angle="45"
                 android:endColor=" #FFFEFFFC"/>
 

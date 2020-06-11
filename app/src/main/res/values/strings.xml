@@ -49,7 +49,7 @@
         <item>robin</item>
     </string-array>
     <array name="family">
-        <item name="Family Member">Family Member</item>
+        <item name="Family Member">Family Member--></item>
         <item name="Wife">Wife</item>
         <item name="Husband">Husband</item>
         <item name="Brother">Brother</item>
@@ -111,5 +111,6 @@
     <string name="hints"><![CDATA[<---Click here To Capture Image..]]></string>
     <string name="btn_family">Add Family Members</string>
     <string name="title_activity_route">Map</string>
+    <string name="welcometo">Welcome... </string>
 
 </resources>

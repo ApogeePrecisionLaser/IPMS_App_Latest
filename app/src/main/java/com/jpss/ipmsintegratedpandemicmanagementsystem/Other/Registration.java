@@ -292,9 +292,9 @@ public class Registration extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
                 if (item.equalsIgnoreCase("Female"))
-                    famgender = "F";
+                    gender = "F";
                 else
-                    famgender = "M";
+                    gender = "M";
 
             }
 
@@ -308,9 +308,9 @@ public class Registration extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
                 if (item.equalsIgnoreCase("Blood Group"))
-                    famblood_group = "";
+                    blood_grp = "";
                 else
-                    famblood_group = item;
+                    blood_grp = item;
             }
 
             @Override
@@ -548,9 +548,9 @@ public class Registration extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
                 if (item.equalsIgnoreCase("Female"))
-                    gender = "F";
+                    famgender = "F";
                 else
-                    gender = "M";
+                    famgender = "M";
 
             }
 
@@ -564,9 +564,9 @@ public class Registration extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
                 if (item.equalsIgnoreCase("Blood Group"))
-                    blood_grp = "";
+                    famblood_group = "";
                 else
-                    blood_grp = item;
+                    famblood_group = item;
             }
 
             @Override
@@ -764,23 +764,34 @@ public class Registration extends AppCompatActivity {
                 try {
                     options=new BitmapFactory.Options();
                     options.inJustDecodeBounds = false;
+                    options.inDither = true;
+                    options.inPreferredConfig = Bitmap.Config.RGB_565;
                     bitmap = BitmapFactory.decodeFile(imagePath, options);
                     imgview.setImageBitmap(bitmap);
+                    ByteArrayOutputStream stream;
+                    stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+                    byte[] byte_arr = stream.toByteArray();
+                    String encodedString = Base64.encodeToString(byte_arr, 1);
                 } catch (OutOfMemoryError e) {
                     try {
                         options=new BitmapFactory.Options();
                         options.inJustDecodeBounds = false;
+                        options.inDither = true;
+                        options.inPreferredConfig = Bitmap.Config.RGB_565;
                         options.inSampleSize = 7;
                         bitmap = BitmapFactory.decodeFile(imagePath, options);
                         imgview.setImageBitmap(bitmap);
+                        ByteArrayOutputStream stream;
+                        stream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+                        byte[] byte_arr = stream.toByteArray();
+                        String encodedString = Base64.encodeToString(byte_arr, 1);
                     } catch (Exception excepetion) {
+                        excepetion.printStackTrace();
                     }
                 }
-                ByteArrayOutputStream stream;
-                stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
-                byte[] byte_arr = stream.toByteArray();
-                String encodedString = Base64.encodeToString(byte_arr, 1);
+
 
                 imgview.requestFocus();
                 imgview.setOnClickListener(new View.OnClickListener() {
@@ -1025,8 +1036,6 @@ public class Registration extends AppCompatActivity {
             edtaddress3.setError("Cannot be empty");
             return false;
         }
-
-
         else if(fatherName.getText().toString().equalsIgnoreCase("")){
             fatherName.setError("Cannot be empty");
             return false;
@@ -1035,6 +1044,19 @@ public class Registration extends AppCompatActivity {
             date_ofbirth.setError("Cannot be empty");
             return false;
         }
+        else if(blood_grp.matches("")){
+            bloodgrp_spinner.setPrompt("Cannot be empty");
+            return false;
+        }
+        else if(editText_Emname.getText().toString().equalsIgnoreCase("")){
+            editText_Emname.setError("Cannot be empty");
+            return false;
+        }
+        else if(textIn.getText().toString().equalsIgnoreCase("")){
+            textIn.setError("Cannot be empty");
+            return false;
+        }
+
 
         return true;
     }
@@ -1069,7 +1091,7 @@ public class Registration extends AppCompatActivity {
             family_pass.setError("Cannot be empty");
             return false;
         }
-        else if(family_member.matches("")){
+        else if(family_member.matches("Family Member-->")){
             familySpinner.setPrompt("Cannot be empty");
             return false;
         }
@@ -1172,6 +1194,7 @@ public class Registration extends AppCompatActivity {
                     }
                     jsonArray.put(json);
                 }catch (Exception e){
+
 //[{"f_username":"hi","f_mobilenumber":"8787887778","f_password":"1234","f_gender":"M","f_dob":"O+","f_bloodgrp":"2020-4-24","f_fathername":"hello","f_familymember":"Husband"}]
                 }
             }

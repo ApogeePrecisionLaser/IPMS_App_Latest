@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
+    android:background="#47528F"
     tools:context=".E_pass.Epassdashboard">
 
     <androidx.appcompat.widget.Toolbar
@@ -20,7 +20,7 @@
         android:id="@+id/llDeviceRegister"
         android:layout_width="match_parent"
         android:layout_below="@+id/tool"
-        android:background="@color/colorPrimaryDark"
+        android:background="#47528F"
         android:layout_height="wrap_content"
         android:weightSum="2">
 
@@ -100,7 +100,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:background="@color/colorPrimaryDark"
+        android:background="#47528F"
         android:layout_below="@+id/llDeviceRegister"
         android:weightSum="2">
 

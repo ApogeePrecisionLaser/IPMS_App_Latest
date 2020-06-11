@@ -9,6 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#47528F"
     tools:context=".Other.NumberRegistrationActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -22,12 +23,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
+        android:layout_marginTop="50dp"
         android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="150dp">
-
+            android:orientation="vertical"
+            android:layout_margin="20dp">
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_gravity="center"
+                android:src="@drawable/corona3"
+                android:layout_marginBottom="20dp"
+                android:layout_height="150dp"/>
             <EditText
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -36,35 +44,27 @@
                 android:singleLine="true"
                 android:hint="@string/hint_mobile"
                 android:maxLength="10"
+                android:background="@drawable/rounded_edttext"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp" />
+
+
         </LinearLayout>
-        <LinearLayout
-            android:id="@+id/btn_register"
-            android:layout_width="match_parent"
-            android:orientation="horizontal"
+
+        <Button
+            android:id="@+id/proceeds"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
             android:layout_gravity="center"
-            android:layout_height="wrap_content">
+            android:layout_marginTop="20dip"
+            android:padding="5dp"
+            android:textSize="15sp"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:background="@drawable/rounded_btn"
+            android:text="@string/btn_proceed" />
 
-            <Button
-                android:id="@+id/proceeds"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dip"
-                android:text="@string/btn_proceed"
-                android:minHeight="40dp" />
 
-            <Button
-                android:id="@+id/btnback"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:visibility="gone"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dip"
-                android:text="@string/btn_back"
-                android:minHeight="40dp" />
-        </LinearLayout>
 
     </LinearLayout>
 

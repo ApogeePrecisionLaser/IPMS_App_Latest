@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#47528F"
     tools:context=".Other.MainActivity">
 
     <LinearLayout
@@ -12,17 +13,33 @@
         android:orientation="vertical"
         android:padding="10dip">
 
-        <Button android:id="@+id/btnRegister"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Register here"
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_gravity="center"
-            android:layout_marginTop="200dp" />
+            android:layout_marginTop="120dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/corona3" />
+
+        <Button android:id="@+id/btnRegister"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:text="Register here"
+            android:padding="5dp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/rounded_btn"
+            android:layout_gravity="center"
+            android:textSize="15sp"
+            android:layout_marginTop="20dp" />
 
         <Button android:id="@+id/btnLogin"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
             android:text="Login"
+            android:padding="5dp"
+            android:textSize="15sp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/rounded_btn"
             android:layout_gravity="center"
             android:layout_marginTop="40dp" />
 

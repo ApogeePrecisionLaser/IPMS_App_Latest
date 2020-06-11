@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
+    android:background="#47528F"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/app_bar_main">
     <androidx.appcompat.widget.Toolbar
@@ -19,8 +20,8 @@
         android:id="@+id/llDeviceRegister"
         android:layout_width="match_parent"
         android:layout_below="@+id/tool"
-        android:background="@color/colorPrimaryDark"
         android:layout_height="wrap_content"
+        android:background="#47528F"
         android:weightSum="2">
 
         <androidx.cardview.widget.CardView
@@ -100,7 +101,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:background="@color/colorPrimaryDark"
+        android:background="#47528F"
         android:layout_below="@+id/llDeviceRegister"
         android:weightSum="2">
 
@@ -183,7 +184,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:background="@color/colorPrimaryDark"
+        android:background="#47528F"
         android:layout_below="@+id/l2DeviceRegister"
         android:weightSum="2">
 

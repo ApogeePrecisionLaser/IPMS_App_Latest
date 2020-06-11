@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-
-
+    android:background="#47528F"
     tools:openDrawer="start">
 
     <androidx.appcompat.widget.Toolbar
@@ -22,12 +21,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/tool"
+        android:layout_margin="20dp"
         android:orientation="vertical"
         >
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:text="You will receive an OTP shortly.\n Enter OTP here to verify your number"
             android:id="@+id/textView"
             android:textSize="18sp"
@@ -42,6 +43,7 @@
             android:inputType="numberDecimal"
             android:hint="Enter OTP"
             android:maxLength="6"
+            android:background="@drawable/rounded_edttext"
             android:singleLine="true"
             android:padding="10dp"
             android:layout_marginTop="75dip"
@@ -52,7 +54,10 @@
             android:layout_width="206dp"
             android:layout_height="wrap_content"
             android:text="submit"
-
+            android:textAlignment="center"
+            android:padding="5dp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/rounded_btn"
             android:textSize="15dp"
             android:id="@+id/button_submit"
             android:layout_gravity="center_horizontal"
@@ -62,7 +67,10 @@
             android:layout_width="326dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dip"
-
+            android:textAlignment="center"
+            android:padding="5dp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/rounded_btn"
             android:text="OTP not received? Resend OTP"
             android:textAllCaps="false"
             android:textSize="15dp" />

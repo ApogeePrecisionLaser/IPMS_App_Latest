@@ -6,6 +6,7 @@
     android:id="@+id/drawer_layout_nav"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#47528F"
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 

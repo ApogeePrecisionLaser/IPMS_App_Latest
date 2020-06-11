@@ -25,11 +25,9 @@ import com.jpss.ipmsintegratedpandemicmanagementsystem.Bean.Bean;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.Database.DatabaseOperation;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.Model.GenericModel;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.R;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -485,11 +483,21 @@ public class Otpactivity extends AppCompatActivity {
                 if (jsonObject.getString("result").contains("success")) {
                     String kp_img=jsonObject.getString("kp_img");
                     String id_img=jsonObject.getString("id_img");
+                    Bitmap bitmap=null;
+                    Bitmap bitmaps=null;
                     //String img ="";
                     byte[] imageAsBytes = Base64.decode(kp_img.getBytes(), Base64.DEFAULT);
-                    Bitmap bitmap = (BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length));
+                    BitmapFactory.Options opts = new BitmapFactory.Options();
+                    opts.inDither = true;
+                    opts.inPreferredConfig = Bitmap.Config.RGB_565;
+                    opts.inJustDecodeBounds=false;
+                    bitmap = (BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length,opts));
                     byte[] image1AsBytes = Base64.decode(id_img.getBytes(), Base64.DEFAULT);
-                    Bitmap bitmaps = (BitmapFactory.decodeByteArray(image1AsBytes, 0, image1AsBytes.length));
+                    BitmapFactory.Options option = new BitmapFactory.Options();
+                    option.inDither = true;
+                    option.inPreferredConfig = Bitmap.Config.RGB_565;
+                    option.inJustDecodeBounds=false;
+                    bitmaps = (BitmapFactory.decodeByteArray(image1AsBytes, 0, image1AsBytes.length,option));
                     //  imageView.setImageBitmap(bitmap);
                     try {
                         path = saveImage(bitmap);

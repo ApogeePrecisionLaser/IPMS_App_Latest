@@ -1,12 +1,15 @@
 package com.jpss.ipmsintegratedpandemicmanagementsystem.E_pass;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -76,28 +79,29 @@ import static com.jpss.ipmsintegratedpandemicmanagementsystem.data.Constants.CON
 
 public class RouteActivity extends FragmentActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
-    ArrayList markerPoints= new ArrayList();
+    ArrayList markerPoints = new ArrayList();
     Marker marker;
     LatLng india;
     ArrayList<LatLng> points = null;
-    ArrayList <String> locations = new ArrayList<>();
-    String epsid,keypid;
-    double lat1=0.0;
-    double lat2=0.0;
-    double lon1=0.0;
-    double lon2=0.0;
-    String violtnid="";
+    ArrayList<String> locations = new ArrayList<>();
+    String epsid, keypid;
+    double lat1 = 0.0;
+    double lat2 = 0.0;
+    double lon1 = 0.0;
+    double lon2 = 0.0;
+    String violtnid = "";
     LocationManager lm;
-    String onpath=null;
-    static String violationid=null;
-    String inbuildig=null;
-    String ismovement=null;
+    String onpath = null;
+    static String violationid = null;
+    String inbuildig = null;
+    String ismovement = null;
     boolean checktime = false;
     boolean offroute = false;
     private static String log_str;
 
     IntentFilter intentFilter;
     NetworkChangeReceiver receiver;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -110,7 +114,6 @@ public class RouteActivity extends FragmentActivity implements OnMapReadyCallbac
         super.onPause();
         unregisterReceiver(receiver);
     }
-
 
 
     @Override
@@ -155,17 +158,17 @@ public class RouteActivity extends FragmentActivity implements OnMapReadyCallbac
 
         //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 16));
-       // currentlocation();
+        // currentlocation();
        /* locations.add("28.471485, 77.131438");
         locations.add("28.472079, 77.129282");
         locations.add("28.472381, 77.134196");
         locations.add("28.472853, 77.133306");*/
 
-        for(int i=0; i<locations.size();i++){
+        for (int i = 0; i < locations.size(); i++) {
             String val = locations.get(i);
             String lat = val.split(",")[0];
             String lon = val.split(",")[1];
-            drawpoint(Double.parseDouble(lat),Double.parseDouble(lon));
+            drawpoint(Double.parseDouble(lat), Double.parseDouble(lon));
         }
 
 
@@ -180,19 +183,18 @@ public class RouteActivity extends FragmentActivity implements OnMapReadyCallbac
 
     }
 
-    public static void addLogText(String log)
-    {
-       System.out.print(log);
-       if(log.contains("NOT_CONNECT")){
-           violationid="1";
-       }else{
-           violationid="3";
-       }
+    public static void addLogText(String log) {
+        System.out.print(log);
+        if (log.contains("NOT_CONNECT")) {
+            violationid = "1";
+        } else {
+            violationid = "3";
+        }
     }
 
-    public void drawpoint(Double lati,Double longi){
+    public void drawpoint(Double lati, Double longi) {
 
-        LatLng posi = new LatLng(lati,longi);
+        LatLng posi = new LatLng(lati, longi);
       /*  if (markerPoints.size() > 1) {
             markerPoints.clear();
             mMap.clear();
@@ -215,7 +217,6 @@ public class RouteActivity extends FragmentActivity implements OnMapReadyCallbac
 
         // Add new marker to the Google Map Android API V2
         mMap.addMarker(options);
-
 
 
         // Checks, whether start and end locations are captured
@@ -248,7 +249,7 @@ public class RouteActivity extends FragmentActivity implements OnMapReadyCallbac
         String parameters = output + "?" + str_origin + "&" + str_destination + "&" + api_key;
 
         String url = "https://maps.googleapis.com/maps/api/directions/" + parameters;
-       // String url = "https://maps.googleapis.com/maps/api/directions/json?origin=Disneyland&destination=Universal+Studios+Hollywood&key=AIzaSyCrbBOSEAUcnJfoLVochZlp92HZROIzXSQ";
+        // String url = "https://maps.googleapis.com/maps/api/directions/json?origin=Disneyland&destination=Universal+Studios+Hollywood&key=AIzaSyCrbBOSEAUcnJfoLVochZlp92HZROIzXSQ";
 
         return url;
     }
@@ -344,7 +345,7 @@ public class RouteActivity extends FragmentActivity implements OnMapReadyCallbac
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
 
             String distance = null;
-            String duration=null;
+            String duration = null;
             PolylineOptions lineOptions = null;
             int resultSize = result.size();
 
@@ -359,10 +360,10 @@ public class RouteActivity extends FragmentActivity implements OnMapReadyCallbac
 
                 int pathSize = path.size();
                 // Fetching all the points in i-th route
-                for(int j=0;j<path.size();j++){
-                    HashMap<String,String> point = path.get(j);
+                for (int j = 0; j < path.size(); j++) {
+                    HashMap<String, String> point = path.get(j);
 
-                    if(j==0) {    // Get distance from the list
+                    if (j == 0) {    // Get distance from the list
                         distance = (String) point.get("distance");
                         duration = (String) point.get("duration");
                         continue;
@@ -380,7 +381,7 @@ public class RouteActivity extends FragmentActivity implements OnMapReadyCallbac
                 lineOptions.width(10);
                 lineOptions.color(Color.BLUE);
             }
-            alertdialog(distance,duration);
+            alertdialog(distance, duration);
             /*if (lastPolyLine != null) {
                 lastPolyLine.remove();
             }
@@ -389,18 +390,17 @@ public class RouteActivity extends FragmentActivity implements OnMapReadyCallbac
             mMap.addPolyline(lineOptions);
             epassviolationentry();
             locationchange();
-          //  currentlocation();
+            //  currentlocation();
 
         }
     }
 
 
-
-    public void alertdialog(String distance,String duration) {
+    public void alertdialog(String distance, String duration) {
         AlertDialog.Builder builder1 = new AlertDialog.Builder(RouteActivity.this);
         builder1.setTitle("Your Estimated Time and Distance is ");
-        builder1.setMessage("Time="+duration +"\n"+
-                "Distance="+distance);
+        builder1.setMessage("Time=" + duration + "\n" +
+                "Distance=" + distance);
         builder1.setCancelable(true);
         builder1.setPositiveButton(
                 "oK",
@@ -428,8 +428,8 @@ public class RouteActivity extends FragmentActivity implements OnMapReadyCallbac
                                     marker.remove();
                                 }
                                 GPSTrack gpsTrack = new GPSTrack(RouteActivity.this);
-                                lat2=lat1;
-                                lon2=lon1;
+                                lat2 = lat1;
+                                lon2 = lon1;
                                 double longitude = gpsTrack.getLongitude();
                                 double latitude = gpsTrack.getLatitude();
                                 double accuracy = gpsTrack.getAccuracy();
@@ -446,16 +446,16 @@ public class RouteActivity extends FragmentActivity implements OnMapReadyCallbac
 
                                     lat1 = latitude;
                                     lon1 = longitude;
-                                    String distance = calculatedistance(lat1,lat2,lon1,lon2);
+                                    String distance = calculatedistance(lat1, lat2, lon1, lon2);
                                     Double dist = Double.parseDouble(distance);
                                     if (dist >= 50) {
-                                      //  sendjsonepasslive(epsid,keypid,latitude,longitude,accuracy,"1","y");
+                                        //  sendjsonepasslive(epsid,keypid,latitude,longitude,accuracy,"1","y");
                                     }
                                     // points.add(india);
                                     double tolerance = 70; // meters
                                     boolean isLocationOnPath = PolyUtil.isLocationOnPath(india, points, true, tolerance);
-                                    if(isLocationOnPath == false){
-                                       showCustomDialog();
+                                    if (isLocationOnPath == false) {
+                                        showCustomDialog();
                                     }
 //                    mMap.moveCamera(CameraUpdateFactory.newLatLng(india));
 //                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 20));
@@ -479,43 +479,43 @@ public class RouteActivity extends FragmentActivity implements OnMapReadyCallbac
 
     }
 
-    private void epassviolationentry(){
-        if(checktime==true){
-            ismovement="y";
-            onpath="1";
-        }else{
-            ismovement="n";
-            onpath="2";
+    private void epassviolationentry() {
+        if (checktime == true) {
+            ismovement = "y";
+            onpath = "1";
+        } else {
+            ismovement = "n";
+            onpath = "2";
         }
 
     }
 
-    private void sendjsonepasslive(String epid,String kid,Double lat, Double lon, Double acc,String epsttsid, String ismvmnt){
+    private void sendjsonepasslive(String epid, String kid, Double lat, Double lon, Double acc, String epsttsid, String ismvmnt) {
         JSONObject jsonObject = new JSONObject();
         GenericModel genericModel = new GenericModel(this);
         try {
-            jsonObject.put("epass_id",epid);
-            jsonObject.put("keyprsnid",kid);
-            jsonObject.put("latitude",lat);
-            jsonObject.put("longitude",lon);
-            jsonObject.put("accuracy",acc);
-            jsonObject.put("epass_statusid",epsttsid);
-            jsonObject.put("ismovement",ismvmnt);
-            jsonObject.put("violation_type_id",violtnid);
+            jsonObject.put("epass_id", epid);
+            jsonObject.put("keyprsnid", kid);
+            jsonObject.put("latitude", lat);
+            jsonObject.put("longitude", lon);
+            jsonObject.put("accuracy", acc);
+            jsonObject.put("epass_statusid", epsttsid);
+            jsonObject.put("ismovement", ismvmnt);
+            jsonObject.put("violation_type_id", violtnid);
 
-           String result = genericModel.sendepasslivedata(jsonObject);
-           if(result.equalsIgnoreCase("success")){
-               DatabaseOperation dbtask = new DatabaseOperation(this);
-               dbtask.open();
-               dbtask.insertepasslivedata(epid,kid,lat,lon,acc,epsttsid,ismvmnt);
-           }
+            String result = genericModel.sendepasslivedata(jsonObject);
+            if (result.equalsIgnoreCase("success")) {
+                DatabaseOperation dbtask = new DatabaseOperation(this);
+                dbtask.open();
+                dbtask.insertepasslivedata(epid, kid, lat, lon, acc, epsttsid, ismvmnt);
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    public void violationtypedataentry(){
+    public void violationtypedataentry() {
         DatabaseOperation dbtask = new DatabaseOperation(this);
         dbtask.open();
         int epslvid = dbtask.getlastindex();
@@ -542,8 +542,8 @@ public class RouteActivity extends FragmentActivity implements OnMapReadyCallbac
                 + " Meter   " + meterInDec);
 
         // Toast.makeText(this, "Radius Value"+ "" + valueResult + "   KM  " + kmInDec + " Meter   " + meterInDec, Toast.LENGTH_SHORT).show();
-        String distance =  kmInDec + "Km" + meterInDec +"Meter";
-       // distancekm.setText(distance);
+        String distance = kmInDec + "Km" + meterInDec + "Meter";
+        // distancekm.setText(distance);
         String dism = String.valueOf(meterInDec);
         return dism;
     }
@@ -581,10 +581,19 @@ public class RouteActivity extends FragmentActivity implements OnMapReadyCallbac
     }
 
 
-
-    private void locationchange(){
-         lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-         lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, new LocationListener() {
+    private void locationchange() {
+        lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
                 // TODO Auto-generated method stub
@@ -596,31 +605,34 @@ public class RouteActivity extends FragmentActivity implements OnMapReadyCallbac
                 double accuracy = location.getAccuracy();
                 double alt = location.getAltitude();
                 india = new LatLng(latttt, lon);
-                sendjsonepasslive(epsid,keypid,latttt,lon,accuracy,onpath,ismovement);
+                sendjsonepasslive(epsid, keypid, latttt, lon, accuracy, onpath, ismovement);
                 double tolerance = 70; // meters
                 boolean isLocationOnPath = PolyUtil.isLocationOnPath(india, points, true, tolerance);
-                if(isLocationOnPath == false){
-                    offroute=true;
-                    violationid="2";
+                if (isLocationOnPath == false) {
+                    offroute = true;
+                    violationid = "2";
                     violationtypedataentry();
                     showCustomDialog();
-                }else if(isLocationOnPath ==true){
-                    offroute=false;
+                } else if (isLocationOnPath == true) {
+                    offroute = false;
                 }
-                checktime=true;
-              //  sendjsonepasslive(epsid,keypid,latttt,lon,accuracy,"1","y");
+                checktime = true;
+                //  sendjsonepasslive(epsid,keypid,latttt,lon,accuracy,"1","y");
                 Toast.makeText(RouteActivity.this, "location change", Toast.LENGTH_SHORT).show();
             }
+
             @Override
             public void onProviderDisabled(String provider) {
                 // TODO Auto-generated method stub
                 System.out.print(provider);
             }
+
             @Override
             public void onProviderEnabled(String provider) {
                 // TODO Auto-generated method stub
                 System.out.print(provider);
             }
+
             @Override
             public void onStatusChanged(String provider, int status,
                                         Bundle extras) {

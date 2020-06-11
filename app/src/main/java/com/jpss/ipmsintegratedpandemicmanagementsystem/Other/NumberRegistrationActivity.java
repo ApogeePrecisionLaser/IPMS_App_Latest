@@ -81,10 +81,8 @@ public class NumberRegistrationActivity extends AppCompatActivity implements Vie
         if (NetworkUtil.getConnectivityStatus(NumberRegistrationActivity.this) > 0 ) System.out.println("Connect");
         else System.out.println("No connection");
         btnProceed=findViewById(R.id.proceeds);
-        btnBack=findViewById(R.id.btnback);
         enterMobile=findViewById(R.id.edt_mobile);
         btnProceed.setOnClickListener(this);
-        btnBack.setOnClickListener(this);
         databaseOperation.open();
     }
 
@@ -92,16 +90,23 @@ public class NumberRegistrationActivity extends AppCompatActivity implements Vie
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.proceeds:
-                webService();
+                if(validationSuccess()){
+                    webService();
+                }
+
                 break;
 
-            case R.id.btnback:
-                Intent intent =new Intent(NumberRegistrationActivity.this,Login.class);
-                startActivity(intent);
-                break;
+
         }
     }
+    private Boolean validationSuccess() {
+        if(enterMobile.getText().toString().equalsIgnoreCase("")){
+            enterMobile.setError("Cannot be empty");
+            return false;
+        }
 
+        return true;
+    }
     private void webService() {
         enterNumber=enterMobile.getText().toString();
         final SharedPreferences sharedPreferences = PreferenceManager

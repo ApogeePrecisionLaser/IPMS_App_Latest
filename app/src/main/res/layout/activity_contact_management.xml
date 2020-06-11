@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#47528F"
     tools:context=".Other.ContactManagement">
 
     <TextView
@@ -14,13 +15,19 @@
         android:text="PERSON DETAILS"
         android:textSize="30dp"
         android:gravity="center"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@android:color/white"
         android:textStyle="bold"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_below="@+id/detail"
-        android:layout_marginTop="30dp"
+        android:layout_margin="20dp"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_below="@+id/detail"
         android:id="@+id/placemeet"
+        android:background="@drawable/rounded_edttext"
         android:padding="20sp"
         android:layout_height="wrap_content">
         <TextView
@@ -41,7 +48,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_below="@+id/placemeet"
-        android:padding="20sp"
+        android:background="@drawable/rounded_edttext"
+        android:padding="5sp"
+        android:layout_marginTop="10dp"
         android:id="@+id/moblileno"
         android:layout_height="wrap_content">
 
@@ -65,7 +74,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_below="@+id/moblileno"
-        android:padding="20sp"
+        android:background="@drawable/rounded_edttext"
+        android:padding="5sp"
+        android:layout_marginTop="10dp"
         android:id="@+id/namelayout"
         android:layout_height="wrap_content">
         <ImageView
@@ -84,7 +95,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_below="@+id/namelayout"
-        android:padding="20sp"
+        android:background="@drawable/rounded_edttext"
+        android:padding="5sp"
+        android:layout_marginTop="10dp"
         android:id="@+id/datetimes"
         android:layout_height="wrap_content">
         <ImageView
@@ -104,7 +117,9 @@
     <LinearLayout
     android:layout_width="match_parent"
     android:layout_below="@+id/datetimes"
-    android:padding="20sp"
+        android:background="@drawable/rounded_edttext"
+        android:padding="5sp"
+        android:layout_marginTop="10dp"
     android:id="@+id/lay3"
     android:layout_height="wrap_content">
     <ImageView
@@ -130,17 +145,20 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:textAlignment="center"
+            android:padding="5dp"
             android:id="@+id/Submit"
             android:text="Submit"
             android:textSize="20dp"
             android:textStyle="bold"
-            android:background="@drawable/submitbg"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@android:color/white"
+            android:background="@drawable/rounded_btn"
             android:inputType="number"/>
 
 
 
+    </LinearLayout>
     </LinearLayout>
    </RelativeLayout>

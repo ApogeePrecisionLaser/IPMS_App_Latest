@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="#47528F"
     tools:context=".Other.ImageActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -27,6 +28,7 @@
             android:id="@+id/Layouts"
             android:orientation="horizontal"
             android:layout_width="match_parent"
+            android:background="@drawable/rounded_edttext"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp">
             <TextView
@@ -54,6 +56,7 @@
             android:orientation="horizontal"
             android:padding="5dp"
             android:layout_marginTop="60dp"
+            android:background="@drawable/rounded_edttext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -80,6 +83,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:background="@drawable/rounded_edttext"
                 android:layout_marginEnd="5dp"
                 android:orientation="vertical"
                 android:layout_height="wrap_content">
@@ -102,6 +106,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_marginStart="5dp"
+                android:background="@drawable/rounded_edttext"
                 android:orientation="vertical"
                 android:layout_height="wrap_content">
                 <TextView
@@ -123,10 +128,14 @@
 
         <Button
             android:id="@+id/sendServer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:padding="5dp"
             android:layout_gravity="center"
+            android:textAlignment="center"
             android:layout_marginTop="30dp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/rounded_btn"
             android:layout_marginBottom="50dp"
             android:text="Submit" />
     </LinearLayout>

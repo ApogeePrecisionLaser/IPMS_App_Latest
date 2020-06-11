@@ -36,7 +36,7 @@ public class OrgnisationTypeActivity extends AppCompatActivity {
     EditText enterNo;
     Spinner typeSpinner;
     Button proceed,proceeds;
-    String orgMobile,org_type="",moblieno;
+    String orgMobile="",org_type="",moblieno;
     ProgressDialog dialog;
     List<String>orgType=new ArrayList<>();
     Toolbar toolbar;
@@ -133,8 +133,13 @@ public class OrgnisationTypeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // getData();
                 orgMobile=enterNo.getText().toString().trim();
-                Callingregistration callingservcie = new Callingregistration();
-                callingservcie.execute();
+                if(orgMobile.equals("")){
+                    Toast.makeText(OrgnisationTypeActivity.this, "Please enter org.no", Toast.LENGTH_SHORT).show();
+                }else {
+                    Callingregistration callingservcie = new Callingregistration();
+                    callingservcie.execute();
+                }
+
             }
         });
     }

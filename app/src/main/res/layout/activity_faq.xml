@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
+    android:background="#47528F"
     tools:context=".Other.FAQ">
 
     <LinearLayout
@@ -26,6 +27,7 @@
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:layout_margin="10dp"
+        android:background="@drawable/rounded_edttext"
         android:layout_height="wrap_content">
         <LinearLayout
             android:id="@+id/first"
