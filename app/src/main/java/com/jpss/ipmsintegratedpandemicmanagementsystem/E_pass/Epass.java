@@ -108,14 +108,12 @@ public class Epass extends AppCompatActivity {
         toolbar =  findViewById(R.id.tool);
         toolbar.setTitle(getString(R.string.E_pass));
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
             }
         });
-
         rsnspnr = findViewById(R.id.rsnspnr);
         sbwrktyp = findViewById(R.id.sbwrktyp);
         frmdt = findViewById(R.id.frmdt);

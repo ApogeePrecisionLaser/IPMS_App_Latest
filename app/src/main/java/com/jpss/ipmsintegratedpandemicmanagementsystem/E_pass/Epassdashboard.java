@@ -19,7 +19,7 @@ import com.jpss.ipmsintegratedpandemicmanagementsystem.R;
 import java.util.ArrayList;
 
 public class Epassdashboard extends AppCompatActivity implements View.OnClickListener{
-    RelativeLayout re_Epassrqst,re_epassshow,re_vendor;
+    RelativeLayout re_Epassrqst,re_epassshow,re_vendor,appointment,re_incmapt;
     CardView cd3;
     Toolbar toolbar;
     public static final String LOGINNUMBER = "loginnumber";
@@ -38,9 +38,13 @@ public class Epassdashboard extends AppCompatActivity implements View.OnClickLis
         re_Epassrqst=findViewById(R.id.re_epass);
         re_epassshow=findViewById(R.id.re_quarantine);
         re_vendor=findViewById(R.id.re_document);
+        appointment=findViewById(R.id.appointment);
+        re_incmapt=findViewById(R.id.re_incmapt);
         re_Epassrqst.setOnClickListener(this);
         re_epassshow.setOnClickListener(this);
         re_vendor.setOnClickListener(this);
+        appointment.setOnClickListener(this);
+        re_incmapt.setOnClickListener(this);
         cd3=findViewById(R.id.cd3);
         GenericModel genericModel = new GenericModel(this);
         final SharedPreferences sharedPreferences = PreferenceManager
@@ -86,6 +90,15 @@ public class Epassdashboard extends AppCompatActivity implements View.OnClickLis
             case R.id.re_document:
                 Intent intent2=new Intent(Epassdashboard.this, Vendorrqstlist.class);
                 startActivity(intent2);
+                break;
+
+            case R.id.appointment:
+                Intent intent3=new Intent(Epassdashboard.this, AppointmentActivity.class);
+                startActivity(intent3);
+                break;
+            case R.id.re_incmapt:
+                Intent intent4=new Intent(Epassdashboard.this, IncomingAppointment.class);
+                startActivity(intent4);
                 break;
 
         }

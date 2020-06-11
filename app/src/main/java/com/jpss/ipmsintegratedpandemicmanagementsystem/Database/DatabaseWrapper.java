@@ -322,6 +322,22 @@ public class DatabaseWrapper extends SQLiteOpenHelper {
 
     /*This four table for epass tracking*/
 
+    private static final String appoointmentepassdetailsquery = " CREATE TABLE Appointment_epass_details ("
+            + " e_pass_id  INTEGER PRIMARY KEY autoincrement,"
+            + " location TEXT DEFAULT NULL,"
+            + " kp_personname TEXT DEFAULT NULL,"
+            + " kp_mobilenum TEXT DEFAULT NULL,"
+            + " valid_from TEXT DEFAULT NULL,"
+            + " valid_to TEXT DEFAULT NULL,"
+            + " work_type TEXT DEFAULT NULL,"
+            + " status TEXT DEFAULT NULL,"
+            + " active TEXT  NOT NULL DEFAULT 'Y',"
+            + " remark TEXT DEFAULT NULL,"
+            + " revision_no INTEGER DEFAULT NULL,"
+            + "  timestamp TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,"
+            + "  FOREIGN KEY (e_pass_id) REFERENCES E_pass (e_pass_id)"
+            + ");";
+
     private static final String epasstypequery = " CREATE TABLE Epass_type ("
             + " epasstype_id  INTEGER PRIMARY KEY autoincrement,"
             + " epass_type TEXT DEFAULT NULL,"
@@ -489,6 +505,7 @@ public class DatabaseWrapper extends SQLiteOpenHelper {
                     db.execSQL(violationtypequery);
                     db.execSQL(epassviolationquery);
                     db.execSQL(epassstatusquery);
+                    db.execSQL(appoointmentepassdetailsquery);
                     result = true;
                 } catch (Exception e) {
                     result = false;
@@ -538,6 +555,7 @@ public class DatabaseWrapper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS violation_type");
         db.execSQL("DROP TABLE IF EXISTS Epass_violation");
         db.execSQL("DROP TABLE IF EXISTS Epass_status");
+        db.execSQL("DROP TABLE IF EXISTS Appointment_epass_details");
         onCreate(db);
     }
 }

@@ -13,6 +13,7 @@ import androidx.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
 
+import com.google.gson.JsonObject;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.Bean.Bean;
 import com.jpss.ipmsintegratedpandemicmanagementsystem.Database.DatabaseOperation;
 
@@ -748,7 +749,7 @@ public class GenericModel
         } catch (Exception e) {
             Log.e(TAG, "Error in http connection " + e.toString());
         }
-        return jsonObject;
+      return jsonObject;
     }
 
     public JSONObject orderdlvrd(JSONObject json) {
@@ -887,6 +888,101 @@ public class GenericModel
             Log.e(TAG, "Error in http connection " + e.toString());
         }
         return data;
+    }
+
+    public JSONObject requestAppointmentlist(JSONObject json) {
+        long result = 0;
+        HttpResponse response = null;
+        JSONObject jsonObject = null;
+        String data = "";
+        try {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+            HttpPost httppost = null;
+
+            final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+
+            String ipp = sharedPreferences.getString(IP, null);
+            String pprt = sharedPreferences.getString(PORT, null);
+            server_ip = ipp;
+            port = pprt;
+            //http://120.138.10.146:8080/ipms/apiIPMS/apiServices/getOrderMgmt
+            if (server_ip!=null || port!=null){
+                if(port.equalsIgnoreCase("8084")){
+                    httppost = new HttpPost("http://" + server_ip + ":" + port + "/apiIPMS/apiServices/getAppointmentEPass");
+                }else{
+                    httppost = new HttpPost("http://" + server_ip + ":" + port + "/ipms/apiIPMS/apiServices/getAppointmentEPass");
+                }
+
+            }else {
+                httppost = new HttpPost("http://" + "120.138.10.146" + ":" + "8080" + "/ipms/apiIPMS/apiServices/getAppointmentEPass");
+            }
+            HttpParams httpParameters = new BasicHttpParams();
+            HttpClient httpClient = new DefaultHttpClient(httpParameters);
+            httppost.setHeader("Content-type", "application/json");
+            httppost.setEntity(new StringEntity(json.toString() , "UTF-8"));
+            try {
+                response = httpClient.execute(httppost);
+                //data = EntityUtils.toString(response.getEntity());
+                jsonObject = processHttpResponse(response);
+                result =  getordrmngmntdatafromjson(jsonObject);
+            } catch (Exception e) {
+                Log.e(TAG, "Error in http execute " + e);
+            }
+            httpClient.getConnectionManager().shutdown();
+        } catch (Exception e) {
+            Log.e(TAG, "Error in http connection " + e.toString());
+        }
+        return jsonObject;
+    }
+
+
+    public JSONObject checkKeyPersonExist(JSONObject json) {
+        long result = 0;
+        HttpResponse response = null;
+        JSONObject jsonObject = null;
+        String data = "";
+        try {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+            HttpPost httppost = null;
+
+            final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+
+            String ipp = sharedPreferences.getString(IP, null);
+            String pprt = sharedPreferences.getString(PORT, null);
+            server_ip = ipp;
+            port = pprt;
+            //http://120.138.10.146:8080/ipms/apiIPMS/apiServices/getOrderMgmt
+            if (server_ip!=null || port!=null){
+                if(port.equalsIgnoreCase("8084")){
+                    httppost = new HttpPost("http://" + server_ip + ":" + port + "/apiIPMS/apiServices/checkKeyPersonExist");
+                }else{
+                    httppost = new HttpPost("http://" + server_ip + ":" + port + "/ipms/apiIPMS/apiServices/checkKeyPersonExist");
+                }
+
+            }else {
+                httppost = new HttpPost("http://" + "120.138.10.146" + ":" + "8080" + "/ipms/apiIPMS/apiServices/checkKeyPersonExist");
+            }
+            HttpParams httpParameters = new BasicHttpParams();
+            HttpClient httpClient = new DefaultHttpClient(httpParameters);
+            httppost.setHeader("Content-type", "application/json");
+            httppost.setEntity(new StringEntity(json.toString() , "UTF-8"));
+            try {
+                response = httpClient.execute(httppost);
+                //data = EntityUtils.toString(response.getEntity());
+                jsonObject = processHttpResponse(response);
+                result =  getordrmngmntdatafromjson(jsonObject);
+            } catch (Exception e) {
+                Log.e(TAG, "Error in http execute " + e);
+            }
+            httpClient.getConnectionManager().shutdown();
+        } catch (Exception e) {
+            Log.e(TAG, "Error in http connection " + e.toString());
+        }
+        return jsonObject;
     }
 
     public JSONObject requestordrmngmntdata(String orgtpnm) {
