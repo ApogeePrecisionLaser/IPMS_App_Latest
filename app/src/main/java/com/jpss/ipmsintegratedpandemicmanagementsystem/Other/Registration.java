@@ -278,7 +278,8 @@ public class Registration extends AppCompatActivity {
 
             }
         });
-        btnAddfamily.setOnClickListener(new View.OnClickListener() {
+        btnAddfamily.setOnClickListener(
+                new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 address=edtaddress.getText().toString();

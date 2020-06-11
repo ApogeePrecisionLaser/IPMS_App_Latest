@@ -53,13 +53,15 @@
     </androidx.cardview.widget.CardView>
 
     <Button
-        android:textColor="#fff"
-        android:background="@drawable/buttonstyle"
         android:layout_margin="10dp"
         android:onClick="check"
         android:layout_gravity="center_horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:padding="5dp"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:background="@drawable/rounded_btn"
+        android:layout_height="40dp"
         android:text="Check Eligibility"/>
 
 
@@ -190,12 +192,14 @@
 
     <Button
         android:id="@+id/fnvrfy"
-        android:textColor="#fff"
-        android:background="@drawable/buttonstyle"
         android:layout_margin="10dp"
         android:layout_gravity="center_horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:padding="5dp"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:background="@drawable/rounded_btn"
         android:text="Apply"/>
 
 
